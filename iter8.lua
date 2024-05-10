@@ -3,56 +3,41 @@
 -- TODO: better documentation
 -- TODO: type annotations
 
-local M_MT = {}
-local M = setmetatable({}, M_MT)
-
-local Iter_MT = {}
-
--- Holds the methods of Iter objects.
-local Iter = setmetatable({}, {
-    -- Iter() constructor
-    __call = function(_, fn)
-        return setmetatable({fn = fn, finished = false}, Iter_MT)
-    end,
-})
-
--- Use the type's methods
-Iter_MT.__index = Iter
-
--- Wrap a coroutine
-Iter.co = function(fn)
-    return Iter(coroutine.wrap(fn))
-end
-
--- Iterator is called (e.g. in a for loop)
-Iter_MT.__call = function(self, ...)
-    if self.finished then
-        error("evaluated an iterator twice")
-        return
-    end
-
-    local ret = {self.fn(...)}
-    if ret[1] ~= nil then
-        return table.unpack(ret)
-    else
-        self.finished = true
-    end
-end
-
-function Iter:next()
-    if self.finished then return end
-    return self()
-end
+-- Forward declare the private iterator constructors
+local mkIter, mkIterCo
 
 ------------------
 -- Constructors --
 ------------------
 
--- M(iter_fn, state, initial, closing)
-M_MT.__call = function(_, iter_fn, state, initial, closing)
+local Iter8_MT = {}
+
+---The main `Iter8` object,
+---returned from `require`ing the module.
+---
+---When called as a function,
+---wraps the return values of
+---a for-loop-compatible, Lua-style iterator
+---such as `pairs`, `ipairs`, or `string.gmatch`.
+---The resulting `iterator` behaves transparently;
+---that is, it provides the same results when evaluated
+---as if you had directly evaluated the arguments to `Iter8`.
+---
+---Example:
+---```lua
+---local iter = Iter8(pairs(t))
+---iter = iter:take(3)
+---for k, v in iter do
+---    process(k, v)
+---end
+---```
+---@overload fun(iter_fn: fun(state: any, control: any), state: any, initial: any, closing: any): iterator
+---@class Iter8
+local Iter8 = setmetatable({}, Iter8_MT)
+Iter8_MT.__call = function(_, iter_fn, state, initial, closing)
     local control = initial
 
-    return Iter(function()
+    return mkIter(function()
         local var = {iter_fn(state, control)}
         control = var[1]
         if control == nil then
@@ -68,27 +53,32 @@ M_MT.__call = function(_, iter_fn, state, initial, closing)
     end)
 end
 
-function M.range(start, finish, step)
+---Iterate over a range of integers.
+---`start` and `step` are optional, both defaulting to a value of 1.
+---@overload fun(start: integer, finish: integer, step: integer): iterator
+---@overload fun(start: integer, finish: integer): iterator
+---@overload fun(finish: integer): iterator
+function Iter8.range(start, finish, step)
     if not finish then
         finish = start
         start = 1
     end
     step = step or 1
 
-    return Iter.co(function()
+    return mkIterCo(function()
         for i = start, finish, step do
             coroutine.yield(i)
         end
     end)
 end
 
--- fn can either return
---      x, seed
--- or return
---      x
--- if x and seed would be the same.
-function M.unfold(seed, fn)
-    return Iter.co(function()
+---fn can either return
+---     x, seed
+---or return
+---     x
+---if x and seed would be the same.
+function Iter8.unfold(seed, fn)
+    return mkIterCo(function()
         while true do
             local x
             x, seed = fn(seed)
@@ -99,65 +89,65 @@ function M.unfold(seed, fn)
     end)
 end
 
-function M.chars(s)
-    return Iter.co(function()
+function Iter8.chars(s)
+    return mkIterCo(function()
         for c in s:gmatch(".") do
             coroutine.yield(c)
         end
     end)
 end
 
-function M.keys(t)
-    return Iter.co(function()
+function Iter8.keys(t)
+    return mkIterCo(function()
         for k, _ in pairs(t) do
             coroutine.yield(k)
         end
     end)
 end
 
-function M.values(t)
-    return Iter.co(function()
+function Iter8.values(t)
+    return mkIterCo(function()
         for _, v in pairs(t) do
             coroutine.yield(v)
         end
     end)
 end
 
-function M.pairs(t)
-    return Iter.co(function()
+function Iter8.pairs(t)
+    return mkIterCo(function()
         for k, v in pairs(t) do
             coroutine.yield(k, v)
         end
     end)
 end
 
-function M.ivalues(t)
-    return Iter.co(function()
+function Iter8.ivalues(t)
+    return mkIterCo(function()
         for _, v in ipairs(t) do
             coroutine.yield(v)
         end
     end)
 end
 
-function M.ipairs(t)
-    return Iter.co(function()
+function Iter8.ipairs(t)
+    return mkIterCo(function()
         for i, v in ipairs(t) do
             coroutine.yield(i, v)
         end
     end)
 end
 
-M.table = M.pairs
-M.list = M.ivalues
+Iter8.table = Iter8.pairs
+Iter8.list = Iter8.ivalues
 
-function M.empty()
-    return Iter(function() end)
+function Iter8.empty()
+    return mkIter(function() end)
 end
 
-function M.once(...)
+function Iter8.once(...)
     local once
     local ret = {...}
-    return Iter(function()
+    return mkIter(function()
         if not once then
             once = true
             return table.unpack(ret)
@@ -165,12 +155,17 @@ function M.once(...)
     end)
 end
 
-function M.rep(v)
-    return Iter(function() return v end)
+---Repeat the given value forever.
+---Returns an infinite iterator.
+---
+---@param v any
+---@return iterator
+function Iter8.rep(v)
+    return mkIter(function() return v end)
 end
 
-function M.cycle(iter)
-    return Iter.co(function()
+function Iter8.cycle(iter)
+    return mkIterCo(function()
         -- Until we exhaust the inner iterator,
         -- yield the iterator's values,
         -- while memoising.
@@ -197,13 +192,69 @@ function M.cycle(iter)
     end)
 end
 
+-------------
+-- Methods --
+-------------
+
+---This section describes the methods available on `iterator` objects.
+---@class iterator
+---@field private fn fun(): any
+---@field finished boolean
+---@operator call:any
+local iterator = {}
+
+local iterator_MT = {
+    __index = iterator,
+
+    -- For when the iterator is called (e.g. in a for loop)
+    __call = function(self)
+        if self.finished then
+            error("evaluated an iterator twice")
+            return
+        end
+
+        local ret = {self.fn()}
+        if ret[1] ~= nil then
+            return table.unpack(ret)
+        else
+            self.finished = true
+        end
+    end,
+}
+
+---Make an `iterator` from a function.
+---@private
+---@param fn fun(): any
+---@return iterator
+function mkIter(fn)
+    return setmetatable({fn = fn, finished = false}, iterator_MT)
+end
+
+---Make an `iterator` from a coroutine-function.
+---@private
+---@see mkIter
+---@param fn fun(): any
+---@return iterator
+function mkIterCo(fn)
+    return mkIter(coroutine.wrap(fn))
+end
+
+---Return the next value in the `iterator`,
+---or `nil` if the `iterator` is finished.
+---@return any
+function iterator:next()
+    if self.finished then return end
+    return self()
+end
+
 ------------------
 -- Transformers --
 ------------------
-function Iter:map(fn)
+
+function iterator:map(fn)
     local inner_fn = self.fn
-    self.fn = function(...)
-        local ret = {inner_fn(...)}
+    self.fn = function()
+        local ret = {inner_fn()}
         if ret[1] == nil then return end
 
         return fn(table.unpack(ret))
@@ -211,12 +262,12 @@ function Iter:map(fn)
     return self
 end
 
--- Calls the given function on each step of the iterator,
--- and otherwise acts as the identity transformation.
-function Iter:trace(fn)
+---Calls the given function on each step of the iterator,
+---and otherwise acts as the identity transformation.
+function iterator:trace(fn)
     local inner_fn = self.fn
-    self.fn = function(...)
-        local ret = {inner_fn(...)}
+    self.fn = function()
+        local ret = {inner_fn()}
         if ret[1] == nil then return end
 
         fn(table.unpack(ret))
@@ -225,8 +276,8 @@ function Iter:trace(fn)
     return self
 end
 
-function Iter:filter(pred)
-    return Iter.co(function()
+function iterator:filter(pred)
+    return mkIterCo(function()
         while true do
             local ret = {self()}
             if ret[1] == nil then return end
@@ -237,8 +288,8 @@ function Iter:filter(pred)
     end)
 end
 
-function Iter:flatten()
-    return Iter.co(function()
+function iterator:flatten()
+    return mkIterCo(function()
         for iter in self do
             while not iter.finished do
                 local ret = {iter()}
@@ -250,8 +301,8 @@ function Iter:flatten()
     end)
 end
 
-function Iter:flatmap(fn)
-    return Iter.co(function()
+function iterator:flatmap(fn)
+    return mkIterCo(function()
         while not self.finished do
             local ret = {self()}
             if ret[1] == nil then return end
@@ -267,16 +318,16 @@ function Iter:flatmap(fn)
     end)
 end
 
-function Iter:take(n)
-    return Iter.co(function()
+function iterator:take(n)
+    return mkIterCo(function()
         for _ = 1, n do
             coroutine.yield(self())
         end
     end)
 end
 
-function Iter:drop(n)
-    return Iter.co(function()
+function iterator:drop(n)
+    return mkIterCo(function()
         for _ = 1, n do self() end
         while not self.finished do
             coroutine.yield(self())
@@ -284,8 +335,8 @@ function Iter:drop(n)
     end)
 end
 
-function Iter:zip(other)
-    return Iter.co(function()
+function iterator:zip(other)
+    return mkIterCo(function()
         while (not self.finished) and (not other.finished) do
             local ret1 = {self()}
             local ret2 = {other()}
@@ -300,8 +351,8 @@ function Iter:zip(other)
     end)
 end
 
-function Iter:zipwith(other, fn)
-    return Iter.co(function()
+function iterator:zipwith(other, fn)
+    return mkIterCo(function()
         while (not self.finished) and (not other.finished) do
             local ret1 = {self()}
             local ret2 = {other()}
@@ -316,8 +367,8 @@ function Iter:zipwith(other, fn)
     end)
 end
 
-function Iter:enumerate()
-    return Iter.co(function()
+function iterator:enumerate()
+    return mkIterCo(function()
         local i = 1
         while not self.finished do
             local ret = {self()}
@@ -329,8 +380,8 @@ function Iter:enumerate()
     end)
 end
 
-function Iter:chain(other)
-    return Iter.co(function()
+function iterator:chain(other)
+    return mkIterCo(function()
         while not self.finished do
             local ret = {self()}
             if ret[1] ~= nil then
@@ -348,20 +399,20 @@ end
 -- Terminators --
 -----------------
 
--- Do nothing, only for side effects.
-function Iter:force()
+---Do nothing; evaluate the `iterator` only for its side effects.
+function iterator:force()
     ---@diagnostic disable-next-line: empty-block
     for _ in self do end
 end
 
--- Run the given function with each element as an argument,
--- ignoring the results.
-function Iter:foreach(fn)
+---Run the given function with each element as an argument,
+---ignoring the results.
+function iterator:foreach(fn)
     return self:trace(fn):force()
 end
 
--- Collect into a table (either map-like or list-like)
-function Iter:collect()
+---Collect into a table (either map-like or list-like)
+function iterator:collect()
     local t = {}
     for var1, var2 in self do
         if var2 then -- map-like
@@ -373,14 +424,14 @@ function Iter:collect()
     return t
 end
 
-function Iter:fold(acc, fn)
+function iterator:fold(acc, fn)
     for x in self do
         acc = fn(x, acc)
     end
     return acc
 end
 
-function Iter:fold1(fn)
+function iterator:fold1(fn)
     local acc
     for x in self do
         if acc then
@@ -392,12 +443,12 @@ function Iter:fold1(fn)
     return acc
 end
 
-function Iter:count()
-    return Iter:fold(0, function(_, acc) return acc + 1 end)
+function iterator:count()
+    return iterator:fold(0, function(_, acc) return acc + 1 end)
 end
 
--- 1-based, i.e. Iter:nth(1) == Iter:first()
-function Iter:nth(n)
+---1-based, i.e. iterator:nth(1) == iterator:first()
+function iterator:nth(n)
     local i = 1
     for x in self do
         if i == n then
@@ -407,7 +458,7 @@ function Iter:nth(n)
     end
 end
 
-function Iter:last()
+function iterator:last()
     local last
     for x in self do
         last = x
@@ -416,4 +467,4 @@ function Iter:last()
 end
 
 
-return M
+return Iter8
