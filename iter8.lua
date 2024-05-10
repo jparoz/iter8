@@ -228,12 +228,21 @@ function Iter8.ipairs(t)
     end)
 end
 
+---Returns an empty `iterator`.
+---
+---@return iterator
 function Iter8.empty()
     return mkIter(function() end)
 end
 
+---Returns an `iterator` which will:
+---* on the first iteration, produce all the arguments given to `Iter8.once`;
+---* then finish.
+---
+---@param ... any
+---@return iterator
 function Iter8.once(...)
-    local once
+    local once = false
     local ret = {...}
     return mkIter(function()
         if not once then
@@ -244,6 +253,7 @@ function Iter8.once(...)
 end
 
 ---Repeat the given value forever.
+---
 ---The returned `iterator` will never finish.
 ---
 ---@param v any
@@ -252,6 +262,14 @@ function Iter8.rep(v)
     return mkIter(function() return v end)
 end
 
+---Returns an `iterator` which
+---endlessly repeats through the elements of
+---the `iterator` given as the argument `iter`.
+---
+---The returned `iterator` will never finish.
+---
+---@param iter iterator
+---@return iterator
 function Iter8.cycle(iter)
     return mkIterCo(function()
         -- Until we exhaust the inner iterator,
