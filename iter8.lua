@@ -13,7 +13,7 @@ local mkIter, mkIterCo
 local Iter8_MT = {}
 
 ---The main `Iter8` object,
----returned from `require`ing the module.
+---returned from the call to `require("iter8")`.
 ---
 ---When called as a function,
 ---wraps the return values of
