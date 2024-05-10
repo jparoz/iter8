@@ -244,7 +244,7 @@ function Iter8.once(...)
 end
 
 ---Repeat the given value forever.
----Returns an infinite iterator.
+---The returned `iterator` will never finish.
 ---
 ---@param v any
 ---@return iterator
@@ -320,7 +320,6 @@ end
 
 ---Make an `iterator` from a coroutine-function.
 ---@private
----@see mkIter
 ---@param fn fun(): any
 ---@return iterator
 function mkIterCo(fn)
