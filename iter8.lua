@@ -96,10 +96,14 @@ function Iter8.unfold(seed, fn)
 end
 
 ---Iterate over matches of the Lua pattern-string `pat` in the string `s`.
+---
+---Has an alias `Iter8.matches`.
+---
+---@see Iter8.matches
+---
 ---@param s string
 ---@param pat string
 ---@return iterator
----@see Iter8.matches
 function Iter8.gmatch(s, pat)
     return mkIterCo(function()
         for match in s:gmatch(pat) do
@@ -111,6 +115,10 @@ end
 ---@see Iter8.gmatch
 Iter8.matches = Iter8.gmatch
 
+---Iterate over characters in the string `s`.
+---
+---@param s string
+---@return iterator
 function Iter8.chars(s)
     return mkIterCo(function()
         for c in s:gmatch(".") do
@@ -119,6 +127,14 @@ function Iter8.chars(s)
     end)
 end
 
+---Iterate over the keys in the table `t`
+---in an arbitrary order (similar to `pairs`).
+---
+---@see Iter8.values
+---@see Iter8.pairs
+---
+---@param t table
+---@return iterator
 function Iter8.keys(t)
     return mkIterCo(function()
         for k, _ in pairs(t) do
@@ -127,6 +143,15 @@ function Iter8.keys(t)
     end)
 end
 
+---Iterate over the values in the table `t`
+---in an arbitrary order (similar to `pairs`).
+---
+---@see Iter8.keys
+---@see Iter8.pairs
+---@see Iter8.ivalues
+---
+---@param t table
+---@return iterator
 function Iter8.values(t)
     return mkIterCo(function()
         for _, v in pairs(t) do
@@ -135,6 +160,21 @@ function Iter8.values(t)
     end)
 end
 
+---Iterate over the keys and values in the table `t`
+---in an arbitrary order (similar to `pairs`).
+---
+---Has an alias `Iter8.table`.
+---
+---* If you just want the values, use `Iter8.values(t)` instead.
+---* If you just want the keys, use `Iter8.keys(t)` instead.
+---
+---@see Iter8.keys
+---@see Iter8.values
+---@see Iter8.ipairs
+---@see Iter8.table
+---
+---@param t table
+---@return iterator
 function Iter8.pairs(t)
     return mkIterCo(function()
         for k, v in pairs(t) do
@@ -143,6 +183,20 @@ function Iter8.pairs(t)
     end)
 end
 
+---@see Iter8.pairs
+Iter8.table = Iter8.pairs
+
+---Iterate over the values in the table `t`
+---in increasing order (similar to `ipairs`).
+---
+---Has an alias `Iter8.list`.
+---
+---@see Iter8.values
+---@see Iter8.pairs
+---@see Iter8.list
+---
+---@param t table
+---@return iterator
 function Iter8.ivalues(t)
     return mkIterCo(function()
         for _, v in ipairs(t) do
@@ -151,6 +205,21 @@ function Iter8.ivalues(t)
     end)
 end
 
+---@see Iter8.ivalues
+Iter8.list = Iter8.ivalues
+
+---Iterate over the indices and values in the table `t`
+---in increasing order (similar to `ipairs`).
+---
+---* If you just want the values, use `Iter8.ivalues(t)` instead.
+---* If you just want the indices, use `Iter8.range(#t)` instead.
+---
+---@see Iter8.ivalues
+---@see Iter8.range
+---@see Iter8.pairs
+---
+---@param t table
+---@return iterator
 function Iter8.ipairs(t)
     return mkIterCo(function()
         for i, v in ipairs(t) do
@@ -158,9 +227,6 @@ function Iter8.ipairs(t)
         end
     end)
 end
-
-Iter8.table = Iter8.pairs
-Iter8.list = Iter8.ivalues
 
 function Iter8.empty()
     return mkIter(function() end)
