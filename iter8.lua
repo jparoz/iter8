@@ -72,11 +72,17 @@ function Iter8.range(start, finish, step)
     end)
 end
 
----fn can either return
----     x, seed
----or return
----     x
----if x and seed would be the same.
+---Generate an `iterator`
+---by (unfolding)[https://en.wikipedia.org/wiki/Anamorphism]
+---using the given seed value and function.
+---
+---fn can either return `val, seed` or just `seed`,
+---if `val` and `seed` would be the same.
+---
+---@generic T
+---@param seed `T`
+---@param fn (fun(seed: T): T) | (fun(seed: T): any, T)
+---@return iterator
 function Iter8.unfold(seed, fn)
     return mkIterCo(function()
         while true do
