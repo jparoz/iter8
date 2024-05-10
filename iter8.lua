@@ -266,6 +266,13 @@ end
 ---endlessly repeats through the elements of
 ---the `iterator` given as the argument `iter`.
 ---
+---> [!Note]
+---> The repetition is accomplished
+---> via memoisation of `iter`'s results;
+---> as such,
+---> if your `iterator` produces non-deterministic or otherwise changing outputs,
+---> you may wish to find another way to achieve this cycling effect.
+---
 ---The returned `iterator` will never finish.
 ---
 ---@param iter iterator
