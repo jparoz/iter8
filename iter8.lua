@@ -89,6 +89,22 @@ function Iter8.unfold(seed, fn)
     end)
 end
 
+---Iterate over matches of the Lua pattern-string `pat` in the string `s`.
+---@param s string
+---@param pat string
+---@return iterator
+---@see Iter8.matches
+function Iter8.gmatch(s, pat)
+    return mkIterCo(function()
+        for match in s:gmatch(pat) do
+            coroutine.yield(match)
+        end
+    end)
+end
+
+---@see Iter8.gmatch
+Iter8.matches = Iter8.gmatch
+
 function Iter8.chars(s)
     return mkIterCo(function()
         for c in s:gmatch(".") do

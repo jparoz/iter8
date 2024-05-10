@@ -85,6 +85,12 @@ describe("Iterator constructor", function()
     end)
   end)
 
+  describe("Iter8.matches(s, pat)", function()
+    it("should iterate over matches of pat in a string", function()
+      assert.are.same({"abc", "def"}, Iter8.matches("abcdef", "..."):collect())
+    end)
+  end)
+
   describe("Iter8.chars(s)", function()
     it("should iterate over characters in a string", function()
       assert.are.same({"h", "e", "l", "l", "o", "!"}, Iter8.chars("hello!"):collect())
