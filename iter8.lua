@@ -2,6 +2,7 @@
 
 -- TODO: better documentation
 -- TODO: type annotations
+-- TODO: README.md
 
 -- Forward declare the private iterator constructors
 local mkIter, mkIterCo
@@ -363,6 +364,16 @@ end
 -- Transformers --
 ------------------
 
+---Maps each step of the iterator
+---by passing the values to `fn`,
+---and replacing the values with the return values of `fn`.
+---
+---@see iterator.flatmap
+---@see iterator.filtermap
+---@see iterator.trace
+---
+---@param fn fun(...): any
+---@return iterator
 function iterator:map(fn)
     local inner_fn = self.fn
     self.fn = function()
@@ -374,8 +385,23 @@ function iterator:map(fn)
     return self
 end
 
----Calls the given function on each step of the iterator,
----and otherwise acts as the identity transformation.
+---Calls `fn` on each step of the iterator,
+---and returns the iterator unchanged.
+---That is,
+---`fn` is called on each step of the iterator
+---just for its side-effects.
+---
+---> [!Note]
+---> `iterator:trace(fn)` doesn't evaluate the `iterator`,
+---> and as such, `fn` will not be called until the `iterator` is evaluated.
+---> If you want to evaluate the iterator straight away,
+---> use `iterator:foreach(fn)`.
+---
+---@see iterator.map
+---@see iterator.foreach
+---
+---@param fn fun(...): any
+---@return iterator
 function iterator:trace(fn)
     local inner_fn = self.fn
     self.fn = function()
@@ -388,6 +414,13 @@ function iterator:trace(fn)
     return self
 end
 
+---Calls `pred` on each step of the `iterator`,
+---and keeps only the steps for which `pred` returns true.
+---
+---@see iterator.filtermap
+---
+---@param pred fun(...): boolean
+---@return iterator
 function iterator:filter(pred)
     return mkIterCo(function()
         while true do
@@ -400,7 +433,7 @@ function iterator:filter(pred)
     end)
 end
 
----Maps each step of the `iterator`
+---Maps each step of `iterator`
 ---by passing the values to `fn`,
 ---and replacing the values with the return values of `fn`—as long as `fn`
 ---has a value other than `nil` as its first return value.
@@ -423,6 +456,15 @@ function iterator:filtermap(fn)
         end
     end)
 end
+
+---Turns an `iterator` of `iterator`s of values
+---into an `iterator` of values.
+---
+---`flatten` removes exactly one level of nesting.
+---
+---@see iterator.flatmap
+---
+---@return iterator
 function iterator:flatten()
     return mkIterCo(function()
         for iter in self do
@@ -436,6 +478,21 @@ function iterator:flatten()
     end)
 end
 
+---Maps each step of `iterator`
+---by passing the values to `fn`,
+---and replacing the values with
+---the concatenated results of the `iterator`s returned from `fn`.
+---
+---`flatmap` removes exactly one level of nesting.
+---
+---Useful for when you want to use `map`,
+---but your mapping function may give more than one result.
+---
+---@see iterator.flatten
+---@see iterator.map
+---
+---@param fn fun(...): iterator
+---@return iterator
 function iterator:flatmap(fn)
     return mkIterCo(function()
         while not self.finished do
