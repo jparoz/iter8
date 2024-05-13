@@ -1,8 +1,5 @@
 -- iter8: Lazy iterator objects
 
--- Forward declare the private iterator constructors
-local mkIter, mkIterCo
-
 ------------------
 -- Constructors --
 ------------------
@@ -38,7 +35,7 @@ local Iter8 = setmetatable({}, Iter8_MT)
 Iter8_MT.__call = function(_, iter_fn, state, initial, closing)
     local control = initial
 
-    return mkIter(function()
+    return Iter8.fn(function()
         local var = {iter_fn(state, control)}
         control = var[1]
         if control == nil then
@@ -67,7 +64,7 @@ function Iter8.range(start, finish, step)
     end
     step = step or 1
 
-    return mkIterCo(function()
+    return Iter8.co(function()
         for i = start, finish, step do
             coroutine.yield(i)
         end
@@ -91,7 +88,7 @@ end
 ---@param fn (fun(seed: T): T) | (fun(seed: T): T, any)
 ---@return iterator
 function Iter8.unfold(seed, fn)
-    return mkIterCo(function()
+    return Iter8.co(function()
         while true do
             local x
             seed, x = fn(seed)
@@ -112,7 +109,7 @@ end
 ---@param pat string
 ---@return iterator
 function Iter8.gmatch(s, pat)
-    return mkIterCo(function()
+    return Iter8.co(function()
         for match in s:gmatch(pat) do
             coroutine.yield(match)
         end
@@ -127,7 +124,7 @@ Iter8.matches = Iter8.gmatch
 ---@param s string
 ---@return iterator
 function Iter8.chars(s)
-    return mkIterCo(function()
+    return Iter8.co(function()
         for c in s:gmatch(".") do
             coroutine.yield(c)
         end
@@ -143,7 +140,7 @@ end
 ---@param t table
 ---@return iterator
 function Iter8.keys(t)
-    return mkIterCo(function()
+    return Iter8.co(function()
         for k, _ in pairs(t) do
             coroutine.yield(k)
         end
@@ -160,7 +157,7 @@ end
 ---@param t table
 ---@return iterator
 function Iter8.values(t)
-    return mkIterCo(function()
+    return Iter8.co(function()
         for _, v in pairs(t) do
             coroutine.yield(v)
         end
@@ -183,7 +180,7 @@ end
 ---@param t table
 ---@return iterator
 function Iter8.pairs(t)
-    return mkIterCo(function()
+    return Iter8.co(function()
         for k, v in pairs(t) do
             coroutine.yield(k, v)
         end
@@ -205,7 +202,7 @@ Iter8.table = Iter8.pairs
 ---@param t table
 ---@return iterator
 function Iter8.ivalues(t)
-    return mkIterCo(function()
+    return Iter8.co(function()
         for _, v in ipairs(t) do
             coroutine.yield(v)
         end
@@ -228,7 +225,7 @@ Iter8.list = Iter8.ivalues
 ---@param t table
 ---@return iterator
 function Iter8.ipairs(t)
-    return mkIterCo(function()
+    return Iter8.co(function()
         for i, v in ipairs(t) do
             coroutine.yield(i, v)
         end
@@ -239,7 +236,7 @@ end
 ---
 ---@return iterator
 function Iter8.empty()
-    return mkIter(function() end)
+    return Iter8.fn(function() end)
 end
 
 ---Returns an `iterator` which will:
@@ -251,7 +248,7 @@ end
 function Iter8.once(...)
     local once = false
     local ret = {...}
-    return mkIter(function()
+    return Iter8.fn(function()
         if not once then
             once = true
             return table.unpack(ret)
@@ -266,7 +263,7 @@ end
 ---@param v any
 ---@return iterator
 function Iter8.rep(v)
-    return mkIter(function() return v end)
+    return Iter8.fn(function() return v end)
 end
 
 ---Returns an `iterator` which
@@ -285,7 +282,7 @@ end
 ---@param iter iterator
 ---@return iterator
 function Iter8.cycle(iter)
-    return mkIterCo(function()
+    return Iter8.co(function()
         -- Until we exhaust the inner iterator,
         -- yield the iterator's values,
         -- while memoising.
@@ -312,6 +309,60 @@ function Iter8.cycle(iter)
     end)
 end
 
+
+-- Forward declare
+local iterator_MT
+
+---Make an `iterator` from
+---a function which uses `return` to provide the iteration step values.
+---
+---Each time the `iterator` is stepped,
+---`fn` will be called,
+---and any values returned
+---will be provided as iteration step values.
+---
+---> [!Warning]
+---> This constructor is very low-level,
+---> and is intended only for advanced use-cases,
+---> when you need to manually implement an `iterator`.
+--->
+---> Unless you're sure you need this,
+---> you should probably use other functions from this library.
+---
+---@see Iter8.co
+---
+---@param fn fun(): any
+---@return iterator
+function Iter8.fn(fn)
+    return setmetatable({fn = fn, finished = false}, iterator_MT)
+end
+
+---Make an `iterator` from a function
+---which calls `coroutine.yield` to provide the iteration step values.
+---`fn` will be passed to `coroutine.wrap`.
+---
+---Each time the `iterator` is stepped,
+---the coroutine will be resumed,
+---and any values passed to `coroutine.yield`
+---will be provided as iteration step values.
+---
+---> [!Warning]
+---> This constructor is very low-level,
+---> and is intended only for advanced use-cases,
+---> when you need to manually implement an `iterator`.
+--->
+---> Unless you're sure you need this,
+---> you should probably use other functions from this library.
+---
+---@see Iter8.fn
+---@see coroutine.wrap
+---
+---@param fn fun(): any
+---@return iterator
+function Iter8.co(fn)
+    return Iter8.fn(coroutine.wrap(fn))
+end
+
 -------------
 -- Methods --
 -------------
@@ -323,7 +374,7 @@ end
 ---@operator call:any
 local iterator = {}
 
-local iterator_MT = {
+iterator_MT = {
     __index = iterator,
 
     -- For when the iterator is called (e.g. in a for loop)
@@ -341,22 +392,6 @@ local iterator_MT = {
         end
     end,
 }
-
----Make an `iterator` from a function.
----@private
----@param fn fun(): any
----@return iterator
-function mkIter(fn)
-    return setmetatable({fn = fn, finished = false}, iterator_MT)
-end
-
----Make an `iterator` from a coroutine-function.
----@private
----@param fn fun(): any
----@return iterator
-function mkIterCo(fn)
-    return mkIter(coroutine.wrap(fn))
-end
 
 ---Return the next value in the `iterator`,
 ---or `nil` if the `iterator` is finished.
@@ -428,7 +463,7 @@ end
 ---@param pred fun(...): boolean
 ---@return iterator
 function iterator:filter(pred)
-    return mkIterCo(function()
+    return Iter8.co(function()
         while true do
             local ret = {self()}
             if ret[1] == nil then return end
@@ -450,7 +485,7 @@ end
 ---@param fn fun(...): any
 ---@return iterator
 function iterator:filtermap(fn)
-    return mkIterCo(function()
+    return Iter8.co(function()
         while true do
             local ret = {self()}
             if ret[1] == nil then return end
@@ -472,7 +507,7 @@ end
 ---
 ---@return iterator
 function iterator:flatten()
-    return mkIterCo(function()
+    return Iter8.co(function()
         for iter in self do
             while not iter.finished do
                 local ret = {iter()}
@@ -500,7 +535,7 @@ end
 ---@param fn fun(...): iterator
 ---@return iterator
 function iterator:flatmap(fn)
-    return mkIterCo(function()
+    return Iter8.co(function()
         while not self.finished do
             local ret = {self()}
             if ret[1] == nil then return end
@@ -527,7 +562,7 @@ end
 ---@param n integer
 ---@return iterator
 function iterator:take(n)
-    return mkIterCo(function()
+    return Iter8.co(function()
         for _ = 1, n do
             coroutine.yield(self())
         end
@@ -546,7 +581,7 @@ end
 ---@param n integer
 ---@return iterator
 function iterator:drop(n)
-    return mkIterCo(function()
+    return Iter8.co(function()
         for _ = 1, n do self() end
         while not self.finished do
             coroutine.yield(self())
@@ -584,7 +619,7 @@ end
 ---@return iterator
 function iterator:zip(...)
     local iters = {self, ...}
-    return mkIterCo(function()
+    return Iter8.co(function()
         while true do
             local rets = {}
             for _, iter in ipairs(iters) do
@@ -624,7 +659,7 @@ end
 ---
 ---@return iterator
 function iterator:enumerate()
-    return mkIterCo(function()
+    return Iter8.co(function()
         local i = 1
         while not self.finished do
             local ret = {self()}
@@ -654,7 +689,7 @@ end
 ---
 ---@param index integer
 function iterator:select(index)
-    return mkIter(function()
+    return Iter8.fn(function()
         local res = select(index, self())
         return res
     end)
@@ -676,7 +711,7 @@ end
 ---@return iterator
 function iterator:chain(...)
     local iters = {self, ...}
-    return mkIterCo(function()
+    return Iter8.co(function()
         for _, iter in ipairs(iters) do
             while true do
                 local ret = {iter()}

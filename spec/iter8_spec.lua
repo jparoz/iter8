@@ -167,6 +167,50 @@ describe("Iterator constructor", function()
     end)
   end)
 
+  do -- primitive constructors
+    local hello = "hello, world"
+    local scanned = {
+      "he",
+      "el",
+      "ll",
+      "lo",
+      "o,",
+      ", ",
+      " w",
+      "wo",
+      "or",
+      "rl",
+      "ld",
+    }
+
+    describe("Iter8.fn(fn)", function()
+      it("should be usable", function()
+        local i = 0
+        local fn = function()
+          i = i + 1
+          if i == #hello then return end
+          return hello:sub(i, i+1)
+        end
+
+        local res = Iter8.fn(fn):collect()
+        assert.are.same(scanned, res)
+      end)
+    end)
+
+    describe("Iter8.co(fn)", function()
+      it("should be usable", function()
+        local fn = function()
+          for i = 1, #hello-1 do
+            coroutine.yield(hello:sub(i, i+1))
+          end
+        end
+
+        local res = Iter8.co(fn):collect()
+        assert.are.same(scanned, res)
+      end)
+    end)
+  end -- primitive constructors
+
 end) -- Iterator constructor
 
 
