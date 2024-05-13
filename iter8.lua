@@ -13,8 +13,11 @@ local mkIter, mkIterCo
 
 local Iter8_MT = {}
 
----The main `Iter8` object,
----returned from the call to `require("iter8")`.
+---The main `Iter8` object.
+---
+---```lua
+---local Iter8 = require "iter8"
+---```
 ---
 ---When called as a function,
 ---wraps the return values of
