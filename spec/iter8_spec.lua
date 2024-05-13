@@ -1,7 +1,5 @@
 local Iter8 = require "iter8"
 
--- TODO: code coverage
-
 -- Helper function
 local plus = function(a, b) return a + b end
 

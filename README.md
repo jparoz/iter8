@@ -2,7 +2,7 @@
 
 Iter8 is a small Lua library
 which provides an iterator object.
-The library is heavily inspired by [Rust's iterators].
+The interface is heavily inspired by [Rust's iterators].
 
 [Rust's iterators]: https://doc.rust-lang.org/std/iter/
 
