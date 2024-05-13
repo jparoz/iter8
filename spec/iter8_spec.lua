@@ -136,7 +136,7 @@ describe("Iterator constructor", function()
     end)
 
     it("should work with two return values", function()
-      local res = Iter8.unfold(5, function(x) return x, x+1 end):take(4):collect()
+      local res = Iter8.unfold(5, function(x) return x+1, x end):take(4):collect()
       assert.are.same({5, 6, 7, 8}, res)
     end)
   end)

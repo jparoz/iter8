@@ -80,8 +80,9 @@ end
 ---by (unfolding)[https://en.wikipedia.org/wiki/Anamorphism]
 ---using the given seed value and function.
 ---
----fn can either return `val, seed` or just `seed`,
----if `val` and `seed` would be the same.
+---`fn` can return either:
+---* both of `seed, val`;
+---* or simply `seed`, if `seed` and `val` would be the same.
 ---
 ---In some sense, this is the opposite of `iterator:fold`.
 ---
@@ -89,14 +90,14 @@ end
 ---
 ---@generic T
 ---@param seed `T`
----@param fn (fun(seed: T): T) | (fun(seed: T): any, T)
+---@param fn (fun(seed: T): T) | (fun(seed: T): T, any)
 ---@return iterator
 function Iter8.unfold(seed, fn)
     return mkIterCo(function()
         while true do
             local x
-            x, seed = fn(seed)
-            seed = seed or x
+            seed, x = fn(seed)
+            x = x or seed
             if x == nil then break end
             coroutine.yield(x)
         end
@@ -771,8 +772,10 @@ end
 ---@param fn fun(x: `T`, acc: A): A
 ---@return A
 function iterator:fold(acc, fn)
-    for x in self do
-        acc = fn(x, acc)
+    while true do
+        local ret = {self()}
+        if ret[1] == nil then break end
+        acc = fn(acc, table.unpack(ret))
     end
     return acc
 end
@@ -781,8 +784,10 @@ end
 ---folding the return values into the accumulator
 ---using the folding function `fn`.
 ---
----The accumulator is initialised with the first value of `iterator`,
----and then the rest of the values are folded in.
+---The accumulator is initialised with
+---the first return value of
+---the first step of `iterator`,
+---and then the rest of the steps are folded in.
 ---This is useful for when you know that `iterator` contains at least one value,
 ---and you don't want to—or are unable to—provide a starting accumulator value.
 ---
@@ -798,15 +803,9 @@ end
 ---@param fn fun(x: `T`, acc: `A`): A
 ---@return A
 function iterator:fold1(fn)
-    local acc
-    for x in self do
-        if acc then
-            acc = fn(x, acc)
-        else
-            acc = x
-        end
-    end
-    return acc
+    local acc = self()
+    if acc == nil then return nil end
+    return self:fold(acc, fn)
 end
 
 ---Evaluates `iterator`,
@@ -814,7 +813,7 @@ end
 ---
 ---@return integer
 function iterator:count()
-    return self:fold(0, function(_, acc) return acc + 1 end)
+    return self:fold(0, function(acc, _) return acc + 1 end)
 end
 
 ---Evaluates `iterator`,
@@ -822,7 +821,7 @@ end
 ---
 ---@return number
 function iterator:sum()
-    return self:fold(0, function(x, acc) return acc + x end)
+    return self:fold(0, function(acc, x) return acc + x end)
 end
 
 ---Evaluates `iterator`,
