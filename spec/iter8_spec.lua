@@ -318,14 +318,6 @@ describe("Iterator transformer", function()
     end)
   end)
 
-  describe("iterator:zipwith(other, fn)", function()
-    it("should combine the values of two iterators using the given function",
-    function()
-      local res = Iter8.range(5):zipwith(Iter8.range(4, 10, 2), plus):collect()
-      assert.are.same({5, 8, 11, 14}, res)
-    end)
-  end)
-
 end) -- Iterator transformer
 
 

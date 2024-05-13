@@ -593,22 +593,6 @@ function iterator:zip(...)
     end)
 end
 
-function iterator:zipwith(other, fn)
-    return mkIterCo(function()
-        while (not self.finished) and (not other.finished) do
-            local ret1 = {self()}
-            local ret2 = {other()}
-            if ret1[1] ~= nil and ret2[1] ~= nil then
-                -- join the result tables using the given function
-                for _, val in ipairs(ret2) do
-                    ret1[#ret1+1] = val
-                end
-                coroutine.yield(fn(table.unpack(ret1)))
-            end
-        end
-    end)
-end
-
 function iterator:enumerate()
     return mkIterCo(function()
         local i = 1
