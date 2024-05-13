@@ -818,6 +818,14 @@ function iterator:count()
 end
 
 ---Evaluates `iterator`,
+---returning the numeric sum of each value of `iterator`.
+---
+---@return number
+function iterator:sum()
+    return self:fold(0, function(x, acc) return acc + x end)
+end
+
+---Evaluates `iterator`,
 ---returning the yielded values of the "nth" step of `iterator`.
 ---
 ---Like many things in Lua,

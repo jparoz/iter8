@@ -410,6 +410,12 @@ describe("Iterator evaluator", function()
     end)
   end)
 
+  describe("iterator:sum()", function()
+    it("should return the sum of iterator's first values", function()
+      assert.are.equal(15, Iter8.range(5):sum())
+    end)
+  end)
+
   describe("iterator:nth(n)", function()
     it("should return the nth value of an iterator", function()
       local res = Iter8.range(1, 20, 3):nth(5)
