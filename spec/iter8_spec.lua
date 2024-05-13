@@ -45,6 +45,10 @@ describe("Iterator constructor", function()
       assert.are.same(res1, res2)
     end)
 
+    it("should transparently wrap ipairs for any table", function()
+      pending("property testing")
+    end)
+
     it("should transparently wrap pairs", function()
       local t = {hi = 123, hello = 456}
       local res1, res2 = {}, {}
@@ -55,6 +59,10 @@ describe("Iterator constructor", function()
         res2[i] = v
       end
       assert.are.same(res1, res2)
+    end)
+
+    it("should transparently wrap pairs for any table", function()
+      pending("property testing")
     end)
 
   end)
@@ -79,9 +87,29 @@ describe("Iterator constructor", function()
   end)
 
   describe("Iter8.table(t)", function()
-    it("should iterate over values in a map-like table", function()
+    it("should iterate over keys and values in a map-like table", function()
       local t = {a=3, b=4, c=5}
       assert.are.same(t, Iter8.table(t):collect())
+    end)
+  end)
+
+  describe("Iter8.keys(t)", function()
+    it("should iterate over keys in a map-like table", function()
+      local t = {a=3, b=4, c=5}
+
+      local res = Iter8.keys(t):collect()
+      table.sort(res)
+      assert.are.same({"a", "b", "c"}, res)
+    end)
+  end)
+
+  describe("Iter8.values(t)", function()
+    it("should iterate over values in a map-like table", function()
+      local t = {a=3, b=4, c=5}
+
+      local res = Iter8.values(t):collect()
+      table.sort(res)
+      assert.are.same({3, 4, 5}, res)
     end)
   end)
 
@@ -113,6 +141,18 @@ describe("Iterator constructor", function()
     end)
   end)
 
+  describe("Iter8.empty()", function()
+    it("should immediately return nil", function()
+      assert.is_nil(Iter8.empty()())
+    end)
+  end)
+
+  describe("Iter8.once(...)", function()
+    it("should immediately return the given values", function()
+      assert.are.same({1, "a", true}, {Iter8.once(1, "a", true)()})
+    end)
+  end)
+
   describe("Iter8.rep(v)", function()
     it("should repeat a single value", function()
       local res = Iter8.rep(33):take(3):collect()
@@ -133,7 +173,7 @@ end) -- Iterator constructor
 describe("Iterator transformer", function()
 
   describe("iterator:map(fn)", function()
-    it("should map values using the given function", function()
+    it("should map values using fn", function()
       local res = Iter8.range(5):map(function(x) return x+1 end):collect()
       assert.are.same({2, 3, 4, 5, 6}, res)
     end)
