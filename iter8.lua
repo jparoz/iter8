@@ -694,19 +694,48 @@ end
 -- Terminators --
 -----------------
 
----Do nothing; evaluate the `iterator` only for its side effects.
+---Evaluates `iterator` for its side effects,
+---throwing away its return values.
+---
+---@see iterator.collect
+---@see iterator.foreach
 function iterator:force()
     ---@diagnostic disable-next-line: empty-block
     for _ in self do end
 end
 
----Run the given function with each element as an argument,
----ignoring the results.
+---Evaluates `iterator`,
+---calling `fn` on each step's values,
+---and throwing away `fn`'s return values.
+---
+---@see iterator.trace
+---@see iterator.map
+---@see iterator.force
+---
+---@param fn fun(...)
 function iterator:foreach(fn)
     return self:trace(fn):force()
 end
 
----Collect into a table (either map-like or list-like)
+---Evaluates `iterator`,
+---collecting all result values into a table.
+---
+---* If `iterator` has one return value per step,
+---  the resulting table will be list-like
+---  (i.e. keys from 1, 2, 3...).
+---* If `iterator` has two or more return values per step,
+---  the resulting table will be map-like
+---  (i.e. keys from the first return value,
+---   values from the second return value).
+---  Note that all other arguments will be ignored.
+---
+---If you just want to evaluate `iterator`,
+---and don't care about the results,
+---use `iterator:force()` instead.
+---
+---@see iterator.force
+---
+---@return table
 function iterator:collect()
     local t = {}
     for var1, var2 in self do
@@ -780,6 +809,10 @@ function iterator:fold1(fn)
     return acc
 end
 
+---Evaluates `iterator`,
+---returning the number of steps of `iterator`.
+---
+---@return integer
 function iterator:count()
     return self:fold(0, function(_, acc) return acc + 1 end)
 end
