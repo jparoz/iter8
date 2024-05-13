@@ -548,18 +548,47 @@ function iterator:drop(n)
     end)
 end
 
-function iterator:zip(other)
+---Joins multiple `iterator`s
+---by evaluating them all,
+---and returning a new `iterator`
+---which yields the return values of all component `iterator`s
+---as multiple values on each step of the resulting `iterator`.
+---Ends when any one of the component `iterator`s ends;
+---that is,
+---the result of `zip` is the same length as the shortest component `iterator`.
+---
+---Example:
+---```lua
+----- prints: "h" 1; "e" 2; "l" 3; "l" 4; "o" 5
+---Iter8.chars("hello"):zip(Iter8.range(10)):foreach(print)
+---
+----- prints: "a" 1 true; "b" 2 true; "c" 3 true
+---Iter8.chars("abc"):zip(Iter8.range(10), Iter8.rep(true)):foreach(print)
+---```
+---@param ... iterator
+---@return iterator
+function iterator:zip(...)
+    local iters = {self, ...}
     return mkIterCo(function()
-        while (not self.finished) and (not other.finished) do
-            local ret1 = {self()}
-            local ret2 = {other()}
-            if ret1[1] ~= nil and ret2[1] ~= nil then
-                -- join the result tables
-                for _, val in ipairs(ret2) do
-                    ret1[#ret1+1] = val
-                end
-                coroutine.yield(table.unpack(ret1))
+        while true do
+            local rets = {}
+            for _, iter in ipairs(iters) do
+                -- As soon as any iterator finishes, finish.
+                local ret = {iter()}
+                if ret[1] == nil then return end
+
+                rets[#rets+1] = ret
             end
+
+            -- join the result tables, then yield
+            local res = rets[1]
+            for i = 2, #rets do
+                for _, val in ipairs(rets[i]) do
+                    res[#res+1] = val
+                end
+            end
+
+            coroutine.yield(table.unpack(res))
         end
     end)
 end

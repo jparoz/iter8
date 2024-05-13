@@ -290,6 +290,32 @@ describe("Iterator transformer", function()
       end)
       assert.are.same(expected, res)
     end)
+
+    it("should combine the values of three or more multi-item iterators",
+    function()
+      local t1 = { "a", 3, true,  "yes" }
+      local t2 = { "b", 4, false, "no" }
+      local t3 = { "c", 5, true,  "maybe" }
+      local expected = {
+        { 1, "a",      1, "b",      1, "c"     },
+        { 2, 3,        2, 4,        2, 5       },
+        { 3, true,     3, false,    3, true    },
+        { 4, "yes",    4, "no",     4, "maybe" },
+      }
+
+      local res = {}
+      Iter8.ipairs(t1)
+        :zip(Iter8.ipairs(t2), Iter8.ipairs(t3))
+        :foreach(function(...)
+        res[#res+1] = {...}
+      end)
+      assert.are.same(expected, res)
+    end)
+
+    it("should work with infinite iterators", function()
+      local res = Iter8.rep(true):zip(Iter8.range(3)):count()
+      assert.are.equal(3, res)
+    end)
   end)
 
   describe("iterator:zipwith(other, fn)", function()
