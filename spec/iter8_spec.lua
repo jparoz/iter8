@@ -186,6 +186,17 @@ describe("Iterator transformer", function()
     end)
   end)
 
+  describe("iterator:filtermap(fn)", function()
+    it("should map values using fn, while fn returns not-null", function()
+      local res = Iter8.range(10):filtermap(function(x)
+        if x % 2 == 0 then
+          return x + 0.5
+        end
+      end):collect()
+      assert.are.same({2.5, 4.5, 6.5, 8.5, 10.5}, res)
+    end)
+  end)
+
   describe("iterator:flatten()", function()
     it("should flatten iterators of iterators into a single layer", function()
       local res =

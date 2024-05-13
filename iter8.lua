@@ -400,6 +400,29 @@ function iterator:filter(pred)
     end)
 end
 
+---Maps each step of the `iterator`
+---by passing the values to `fn`,
+---and replacing the values with the return values of `fn`—as long as `fn`
+---has a value other than `nil` as its first return value.
+---
+---@see iterator.filter
+---@see iterator.map
+---
+---@param fn fun(...): any
+---@return iterator
+function iterator:filtermap(fn)
+    return mkIterCo(function()
+        while true do
+            local ret = {self()}
+            if ret[1] == nil then return end
+
+            local res = {fn(table.unpack(ret))}
+            if res[1] ~= nil then
+                coroutine.yield(table.unpack(res))
+            end
+        end
+    end)
+end
 function iterator:flatten()
     return mkIterCo(function()
         for iter in self do
