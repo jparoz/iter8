@@ -636,7 +636,7 @@ function iterator:fold1(fn)
 end
 
 function iterator:count()
-    return iterator:fold(0, function(_, acc) return acc + 1 end)
+    return self:fold(0, function(_, acc) return acc + 1 end)
 end
 
 ---1-based, i.e. iterator:nth(1) == iterator:first()

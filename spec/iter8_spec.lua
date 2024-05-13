@@ -361,6 +361,20 @@ describe("Iterator evaluator", function()
     end)
   end)
 
+  describe("iterator:count()", function()
+    it("should return 3 for a 3-step iterator", function()
+      assert.are.equal(3, Iter8.range(3):count())
+    end)
+
+    it("should return 0 for the empty iterator", function()
+      assert.are.equal(0, Iter8.empty():count())
+    end)
+
+    it("should be tested more thoroughly", function()
+      pending("property testing")
+    end)
+  end)
+
   describe("iterator:nth(n)", function()
     it("should return the nth value of an iterator", function()
       local res = Iter8.range(1, 20, 3):nth(5)
