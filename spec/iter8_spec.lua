@@ -234,14 +234,6 @@ describe("Iterator transformer", function()
     end)
   end)
 
-  describe("iterator:chain(other)", function()
-    it("should return the values of iter, then the values of other",
-    function()
-      local res = Iter8.range(1, 10, 3):chain(Iter8.range(3)):collect()
-      assert.are.same({1, 4, 7, 10, 1, 2, 3}, res)
-    end)
-  end)
-
   describe("iterator:take(n)", function()
     it("should take n values, then finish the iterator", function()
       local res = Iter8.range(20):take(5):collect()
@@ -253,18 +245,6 @@ describe("Iterator transformer", function()
     it("should ignore n values, then continue the iterator", function()
       local res = Iter8.range(20):drop(15):collect()
       assert.are.same({16, 17, 18, 19, 20}, res)
-    end)
-  end)
-
-  describe("iterator:enumerate()", function()
-    it("should add the iterator value number as an extra iterator value",
-    function()
-      local res = Iter8.range(1, 10, 3):chain(Iter8.range(3)):collect()
-      assert.are.same({1, 4, 7, 10, 1, 2, 3}, res)
-    end)
-
-    it("should be equivalent to Iter8.range(math.maxinteger):zip(iter)", function()
-      pending("property testing")
     end)
   end)
 
@@ -315,6 +295,43 @@ describe("Iterator transformer", function()
     it("should work with infinite iterators", function()
       local res = Iter8.rep(true):zip(Iter8.range(3)):count()
       assert.are.equal(3, res)
+    end)
+  end)
+
+  describe("iterator:enumerate()", function()
+    it("should add the iterator value number as an extra iterator value",
+    function()
+      local res = Iter8.range(1, 10, 3):chain(Iter8.range(3)):collect()
+      assert.are.same({1, 4, 7, 10, 1, 2, 3}, res)
+    end)
+
+    it("should be equivalent to Iter8.range(math.maxinteger):zip(iter)", function()
+      pending("property testing")
+    end)
+  end)
+
+  describe("iterator:select(index)", function()
+    it("should select one column of iterator's return values", function()
+      local res =
+        Iter8.chars("abc"):zip(Iter8.range(3, 7), Iter8.rep(true))
+          :select(2)
+          :collect()
+
+      -- Note: {3, 4, 5} not {3, 4, 5, 6, 7}, because #"abc" == 3
+      assert.are.same({3, 4, 5}, res)
+    end)
+
+    it("should be empty if index is greater than number of return values",
+    function()
+      assert.are.same({}, Iter8.chars("abc"):select(5):collect())
+    end)
+  end)
+
+  describe("iterator:chain(other)", function()
+    it("should return the values of iter, then the values of other",
+    function()
+      local res = Iter8.range(1, 10, 3):chain(Iter8.range(3)):collect()
+      assert.are.same({1, 4, 7, 10, 1, 2, 3}, res)
     end)
   end)
 

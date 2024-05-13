@@ -571,6 +571,7 @@ end
 ---```
 ---
 ---@see iterator.enumerate
+---@see iterator.select
 ---@see iterator.chain
 ---
 ---@param ... iterator
@@ -626,6 +627,30 @@ function iterator:enumerate()
                 i = i + 1
             end
         end
+    end)
+end
+
+---Yields a single return value from each of `iterator`'s steps,
+---ignoring the others.
+---The argument is chosen by `index`:
+---* If `index == 1`, the first argument is returned;
+---* If `index == 2`, the second argument is returned;
+---* etc.
+---In particular,
+---if `index` is greater than the number of arguments,
+---the returned iterator will be empty.
+---
+---`iterator:select(index)` is analogous to Lua's `select(index, ...)`.
+---
+---This might be thought of as a way to "undo" `zip`.
+---
+---@see iterator.zip
+---
+---@param index integer
+function iterator:select(index)
+    return mkIter(function()
+        local res = select(index, self())
+        return res
     end)
 end
 
