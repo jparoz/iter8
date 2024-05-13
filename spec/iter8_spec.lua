@@ -415,12 +415,32 @@ describe("Iterator evaluator", function()
       local res = Iter8.range(1, 20, 3):nth(5)
       assert.are.equal(13, res)
     end)
+
+    it("should work with multiple return values", function()
+      local res1, res2 = Iter8.range(3, 6):zip(Iter8.chars("abcde")):nth(3)
+      assert.are.equal(5, res1)
+      assert.are.equal("c", res2)
+    end)
+
+    it("should return nil if n > #iterator", function()
+      assert.is_nil(Iter8.range(5):nth(10))
+    end)
   end)
 
   describe("iterator:last()", function()
     it("should return the last value of an iterator", function()
       local res = Iter8.range(1, 20, 3):last()
       assert.are.equal(19, res)
+    end)
+
+    it("should work with multiple return values", function()
+      local res1, res2 = Iter8.range(3, 6):zip(Iter8.chars("abcde")):last()
+      assert.are.equal(6, res1)
+      assert.are.equal("d", res2)
+    end)
+
+    it("should return nil for an empty iterator", function()
+      assert.is_nil(Iter8.empty():last())
     end)
   end)
 

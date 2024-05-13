@@ -817,23 +817,49 @@ function iterator:count()
     return self:fold(0, function(_, acc) return acc + 1 end)
 end
 
----1-based, i.e. iterator:nth(1) == iterator:first()
+---Evaluates `iterator`,
+---returning the yielded values of the "nth" step of `iterator`.
+---
+---Like many things in Lua,
+---`nth` is 1-based;
+---i.e. `iterator:nth(1)` will return the first step of `iterator`.
+---
+---If `n` is greater than the number of steps of `iterator`,
+---`nth` returns `nil`.
+---
+---@return any
 function iterator:nth(n)
     local i = 1
-    for x in self do
-        if i == n then
-            return x
+    while true do
+        local ret = {self()}
+        if ret[1] == nil then
+            return
         end
+
+        if i == n then
+            return table.unpack(ret)
+        end
+
         i = i + 1
     end
 end
 
+---Evaluates `iterator`,
+---returning the yielded values of the final step of `iterator`.
+---
+---If `iterator` is empty,
+---`last` returns `nil`.
+---
+---@return any
 function iterator:last()
-    local last
-    for x in self do
-        last = x
+    local last = {}
+    while true do
+        local ret = {self()}
+        if ret[1] == nil then
+            return table.unpack(last)
+        end
+        last = ret
     end
-    return last
 end
 
 
