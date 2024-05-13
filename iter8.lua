@@ -83,6 +83,10 @@ end
 ---fn can either return `val, seed` or just `seed`,
 ---if `val` and `seed` would be the same.
 ---
+---In some sense, this is the opposite of `iterator:fold`.
+---
+---@see iterator.fold
+---
 ---@generic T
 ---@param seed `T`
 ---@param fn (fun(seed: T): T) | (fun(seed: T): any, T)
@@ -715,6 +719,28 @@ function iterator:collect()
     return t
 end
 
+---Evaluates `iterator`,
+---folding the return values into the accumulator `acc`
+---using the folding function `fn`.
+---
+---On each step,
+---`fn` is called like so:
+---`acc = fn(x, acc)`
+---(where `x` is the current value of `iterator`,
+--- and `acc` is the previously-returned value of `acc`).
+---
+---The result returned from `fold` is the final value of `acc`.
+---
+---In some sense, this is the opposite of `Iter8.unfold`.
+---
+---@see iterator.fold1
+---@see Iter8.unfold
+---
+---@generic T
+---@generic A
+---@param acc `A`
+---@param fn fun(x: `T`, acc: A): A
+---@return A
 function iterator:fold(acc, fn)
     for x in self do
         acc = fn(x, acc)
@@ -722,6 +748,26 @@ function iterator:fold(acc, fn)
     return acc
 end
 
+---Evaluates `iterator`,
+---folding the return values into the accumulator
+---using the folding function `fn`.
+---
+---The accumulator is initialised with the first value of `iterator`,
+---and then the rest of the values are folded in.
+---This is useful for when you know that `iterator` contains at least one value,
+---and you don't want to—or are unable to—provide a starting accumulator value.
+---
+---If `iterator` is empty,
+---`fold1` returns `nil`.
+---
+---See the documentation of `fold` for more information on how folding works.
+---
+---@see iterator.fold
+---
+---@generic T
+---@generic A
+---@param fn fun(x: `T`, acc: `A`): A
+---@return A
 function iterator:fold1(fn)
     local acc
     for x in self do
