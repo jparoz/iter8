@@ -510,6 +510,16 @@ function iterator:flatmap(fn)
     end)
 end
 
+---Yields the first `n` steps of `iterator`,
+---then ends the iterator.
+---
+---If `iterator` yields fewer than `n` steps,
+---then the result of `take` will be equivalent to `iterator`.
+---
+---@see iterator.drop
+---
+---@param n integer
+---@return iterator
 function iterator:take(n)
     return mkIterCo(function()
         for _ = 1, n do
@@ -518,6 +528,17 @@ function iterator:take(n)
     end)
 end
 
+
+---Skips the first `n` steps of `iterator`,
+---then yields the rest of the steps of `iterator`.
+---
+---If `iterator` yields fewer than `n` steps,
+---then the result of `drop` will be equivalent to `iterator.empty()`.
+---
+---@see iterator.take
+---
+---@param n integer
+---@return iterator
 function iterator:drop(n)
     return mkIterCo(function()
         for _ = 1, n do self() end
