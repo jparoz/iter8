@@ -548,14 +548,18 @@ function iterator:drop(n)
     end)
 end
 
----Joins multiple `iterator`s
----by evaluating them all,
----and returning a new `iterator`
----which yields the return values of all component `iterator`s
+---Yields the return values of all component `iterator`s
 ---as multiple values on each step of the resulting `iterator`.
 ---Ends when any one of the component `iterator`s ends;
 ---that is,
 ---the result of `zip` is the same length as the shortest component `iterator`.
+---
+---All return values of component `iterator`s are included,
+---including multiple return values of component `iterator`s.
+---
+---Joins multiple `iterator`s "in parallel".
+---To join `iterator`s "in series",
+---use `iterator:chain(...)`.
 ---
 ---Example:
 ---```lua
@@ -565,6 +569,10 @@ end
 ----- prints: "a" 1 true; "b" 2 true; "c" 3 true
 ---Iter8.chars("abc"):zip(Iter8.range(10), Iter8.rep(true)):foreach(print)
 ---```
+---
+---@see iterator.enumerate
+---@see iterator.chain
+---
 ---@param ... iterator
 ---@return iterator
 function iterator:zip(...)
@@ -593,6 +601,21 @@ function iterator:zip(...)
     end)
 end
 
+---Adds the step index as an extra first value.
+---
+---Equivalent to `Iter8.range(math.maxinteger):zip(iterator)`.
+---
+---Example:
+---```lua
+----- prints: 1 "a"; 2 "b"; 3 "c"
+---for i, v in Iter8.chars("abc"):enumerate() do
+---    print(i, v)
+---end
+---```
+---
+---@see iterator.zip
+---
+---@return iterator
 function iterator:enumerate()
     return mkIterCo(function()
         local i = 1
@@ -606,17 +629,31 @@ function iterator:enumerate()
     end)
 end
 
-function iterator:chain(other)
+---Yields all the values of `iterator`,
+---then all the values of the first argument,
+---then all the values of the second argument,
+---and so forth;
+---until all the `iterator`s are finished.
+---
+---Joins multiple `iterator`s "in series".
+---To join `iterator`s "in parallel",
+---use `iterator:zip(...)`.
+---
+---@see iterator.zip
+---
+---@param ... iterator
+---@return iterator
+function iterator:chain(...)
+    local iters = {self, ...}
     return mkIterCo(function()
-        while not self.finished do
-            local ret = {self()}
-            if ret[1] ~= nil then
+        for _, iter in ipairs(iters) do
+            while true do
+                local ret = {iter()}
+                if ret[1] == nil then
+                    break
+                end
                 coroutine.yield(table.unpack(ret))
             end
-        end
-
-        while not other.finished do
-            coroutine.yield(other())
         end
     end)
 end
