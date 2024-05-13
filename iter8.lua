@@ -1,9 +1,5 @@
 -- iter8: Lazy iterator objects
 
--- TODO: better documentation
--- TODO: type annotations
--- TODO: README.md
-
 -- Forward declare the private iterator constructors
 local mkIter, mkIterCo
 
@@ -35,6 +31,7 @@ local Iter8_MT = {}
 ---    process(k, v)
 ---end
 ---```
+---
 ---@overload fun(iter_fn: fun(state: any, control: any), state: any, initial: any, closing: any): iterator
 ---@class Iter8
 local Iter8 = setmetatable({}, Iter8_MT)
@@ -59,6 +56,7 @@ end
 
 ---Iterate over a range of integers.
 ---`start` and `step` are optional, both defaulting to a value of 1.
+---
 ---@overload fun(start: integer, finish: integer, step: integer): iterator
 ---@overload fun(start: integer, finish: integer): iterator
 ---@overload fun(finish: integer): iterator
