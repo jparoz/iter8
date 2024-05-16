@@ -51,6 +51,8 @@ Iter8_MT.__call = function(_, iter_fn, state, initial, closing)
     end)
 end
 
+Iter8._VERSION = "0.1.0"
+
 ---Iterate over a range of integers.
 ---`start` and `step` are optional, both defaulting to a value of 1.
 ---
