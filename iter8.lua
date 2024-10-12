@@ -844,6 +844,19 @@ function iterator:fold1(fn)
 end
 
 ---Evaluates `iterator`,
+---returning the result of string-concatenating each value of `iterator`.
+---
+---Equivalent to:
+---```lua
+---fold("", function(s, acc) return s .. acc end)
+---```
+---
+---@return string
+function iterator:concat()
+    return self:fold("", function(s, acc) return s .. acc end)
+end
+
+---Evaluates `iterator`,
 ---returning the number of steps of `iterator`.
 ---
 ---@return integer
