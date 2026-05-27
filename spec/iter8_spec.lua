@@ -43,10 +43,6 @@ describe("Iterator constructor", function()
       assert.are.same(res1, res2)
     end)
 
-    it("should transparently wrap ipairs for any table", function()
-      pending("property testing")
-    end)
-
     it("should transparently wrap pairs", function()
       local t = {hi = 123, hello = 456}
       local res1, res2 = {}, {}
@@ -57,10 +53,6 @@ describe("Iterator constructor", function()
         res2[i] = v
       end
       assert.are.same(res1, res2)
-    end)
-
-    it("should transparently wrap pairs for any table", function()
-      pending("property testing")
     end)
 
   end)
@@ -288,9 +280,6 @@ describe("Iterator transformer", function()
       assert.are.same({1, 2, 1, 3, 2, 1}, res)
     end)
 
-    it("should be equivalent to iterator:map(fn):flatten()", function()
-      pending("property testing")
-    end)
     it("should skip empty inner iterators", function()
       local res =
         Iter8.range(4)
@@ -404,9 +393,6 @@ describe("Iterator transformer", function()
       assert.are.same({{1,"x"},{2,"y"},{3,"z"}}, res)
     end)
 
-    it("should be equivalent to Iter8.range(math.maxinteger):zip(iter)", function()
-      pending("property testing")
-    end)
   end)
 
   describe("iterator:select(index)", function()
@@ -618,9 +604,6 @@ describe("Iterator evaluator", function()
       assert.are.equal(0, Iter8.empty():count())
     end)
 
-    it("should be tested more thoroughly", function()
-      pending("property testing")
-    end)
   end)
 
   describe("iterator:sum()", function()
