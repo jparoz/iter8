@@ -1,0 +1,10 @@
+[project]
+name = "iter8-docs"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "mkdocs-material>=9.5",
+]
+
+[tool.uv]
+package = false

@@ -1,0 +1,13 @@
+# MkDocs build output
+site/
+
+# Generated API reference (rebuilt by docs/extract.py)
+docs/api.md
+
+# uv / Python
+.venv/
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
