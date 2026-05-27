@@ -296,6 +296,8 @@ function Iter8.cycle(iter)
             coroutine.yield(table.unpack(ret))
         end
 
+        if #memo == 0 then return end
+
         -- Now that we've exhausted the iterator,
         -- repeatedly loop through the memoised results.
         local i = 1
@@ -584,7 +586,10 @@ end
 ---@return iterator
 function iterator:drop(n)
     return Iter8.co(function()
-        for _ = 1, n do self() end
+        for _ = 1, n do
+            if self.finished then break end
+            self()
+        end
         while not self.finished do
             coroutine.yield(self())
         end
@@ -726,6 +731,158 @@ function iterator:chain(...)
     end)
 end
 
+---Yields elements while `pred` returns true,
+---stopping at the first element for which `pred` returns false.
+---
+---@see iterator.dropwhile
+---@see iterator.filter
+---
+---@param pred fun(...): boolean
+---@return iterator
+function iterator:takewhile(pred)
+    return Iter8.co(function()
+        while true do
+            local ret = {self()}
+            if ret[1] == nil then return end
+            if not pred(table.unpack(ret)) then return end
+            coroutine.yield(table.unpack(ret))
+        end
+    end)
+end
+
+---Skips elements while `pred` returns true,
+---then yields all remaining elements.
+---
+---@see iterator.takewhile
+---@see iterator.drop
+---
+---@param pred fun(...): boolean
+---@return iterator
+function iterator:dropwhile(pred)
+    return Iter8.co(function()
+        local dropping = true
+        while true do
+            local ret = {self()}
+            if ret[1] == nil then return end
+            if dropping and pred(table.unpack(ret)) then
+                -- skip
+            else
+                dropping = false
+                coroutine.yield(table.unpack(ret))
+            end
+        end
+    end)
+end
+
+---Like `fold`, but yields each intermediate accumulator value
+---rather than returning only the final result.
+---
+---@see iterator.fold
+---
+---@generic T
+---@generic A
+---@param acc `A`
+---@param fn fun(acc: A, x: T): A
+---@return iterator
+function iterator:scan(acc, fn)
+    return Iter8.co(function()
+        while true do
+            local ret = {self()}
+            if ret[1] == nil then return end
+            acc = fn(acc, table.unpack(ret))
+            coroutine.yield(acc)
+        end
+    end)
+end
+
+---Yields non-overlapping chunks of `n` elements as tables.
+---The final chunk may be smaller than `n`
+---if the iterator does not divide evenly.
+---
+---@see iterator.windows
+---
+---@param n integer
+---@return iterator
+function iterator:chunks(n)
+    return Iter8.co(function()
+        while not self.finished do
+            local chunk = {}
+            for _ = 1, n do
+                local v = self()
+                if v == nil then break end
+                chunk[#chunk+1] = v
+            end
+            if #chunk > 0 then
+                coroutine.yield(chunk)
+            end
+        end
+    end)
+end
+
+---Yields every overlapping window of `n` consecutive elements as a table.
+---Produces `max(0, length - n + 1)` windows.
+---
+---@see iterator.chunks
+---
+---@param n integer
+---@return iterator
+function iterator:windows(n)
+    return Iter8.co(function()
+        local window = {}
+        for _ = 1, n do
+            local v = self()
+            if v == nil then return end
+            window[#window+1] = v
+        end
+        coroutine.yield({table.unpack(window)})
+        while not self.finished do
+            local v = self()
+            if v == nil then return end
+            table.remove(window, 1)
+            window[#window+1] = v
+            coroutine.yield({table.unpack(window)})
+        end
+    end)
+end
+
+---Yields every `n`th element, starting with the first.
+---
+---`step_by(1)` is equivalent to the original iterator.
+---
+---@param n integer
+---@return iterator
+function iterator:step_by(n)
+    return Iter8.co(function()
+        local i = 0
+        while not self.finished do
+            local ret = {self()}
+            if ret[1] == nil then return end
+            i = i + 1
+            if (i - 1) % n == 0 then
+                coroutine.yield(table.unpack(ret))
+            end
+        end
+    end)
+end
+
+---Inserts `sep` between each element of `iterator`.
+---
+---@param sep any
+---@return iterator
+function iterator:intersperse(sep)
+    return Iter8.co(function()
+        local first = {self()}
+        if first[1] == nil then return end
+        coroutine.yield(table.unpack(first))
+        while not self.finished do
+            local ret = {self()}
+            if ret[1] == nil then return end
+            coroutine.yield(sep)
+            coroutine.yield(table.unpack(ret))
+        end
+    end)
+end
+
 -----------------
 -- Terminators --
 -----------------
@@ -846,14 +1003,89 @@ end
 ---Evaluates `iterator`,
 ---returning the result of string-concatenating each value of `iterator`.
 ---
----Equivalent to:
----```lua
----fold("", function(s, acc) return s .. acc end)
----```
+---An optional `sep` string is inserted between each element.
 ---
+---@param sep? string
 ---@return string
-function iterator:concat()
-    return self:fold("", function(s, acc) return s .. acc end)
+function iterator:concat(sep)
+    if sep == nil then
+        return self:fold("", function(acc, x) return acc .. x end)
+    end
+    local first = {self()}
+    if first[1] == nil then return "" end
+    return self:fold(first[1], function(acc, x) return acc .. sep .. x end)
+end
+
+---Evaluates `iterator`,
+---returning `true` if `pred` returns true for at least one element.
+---Short-circuits on the first matching element.
+---
+---Returns `false` for an empty iterator.
+---
+---@see iterator.all
+---
+---@param pred fun(...): boolean
+---@return boolean
+function iterator:any(pred)
+    while true do
+        local ret = {self()}
+        if ret[1] == nil then return false end
+        if pred(table.unpack(ret)) then return true end
+    end
+end
+
+---Evaluates `iterator`,
+---returning `true` if `pred` returns true for every element.
+---Short-circuits on the first non-matching element.
+---
+---Returns `true` for an empty iterator.
+---
+---@see iterator.any
+---
+---@param pred fun(...): boolean
+---@return boolean
+function iterator:all(pred)
+    while true do
+        local ret = {self()}
+        if ret[1] == nil then return true end
+        if not pred(table.unpack(ret)) then return false end
+    end
+end
+
+---Evaluates `iterator`,
+---returning the first element for which `pred` returns true,
+---or `nil` if no element matches.
+---
+---@param pred fun(...): boolean
+---@return any
+function iterator:find(pred)
+    while true do
+        local ret = {self()}
+        if ret[1] == nil then return nil end
+        if pred(table.unpack(ret)) then return table.unpack(ret) end
+    end
+end
+
+---Evaluates `iterator`,
+---returning the minimum value.
+---Returns `nil` for an empty iterator.
+---
+---@see iterator.max
+---
+---@return any
+function iterator:min()
+    return self:fold1(function(acc, x) return x < acc and x or acc end)
+end
+
+---Evaluates `iterator`,
+---returning the maximum value.
+---Returns `nil` for an empty iterator.
+---
+---@see iterator.min
+---
+---@return any
+function iterator:max()
+    return self:fold1(function(acc, x) return x > acc and x or acc end)
 end
 
 ---Evaluates `iterator`,
