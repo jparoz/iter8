@@ -1,6 +1,6 @@
 # iter8
 
-**iter8** is a lazy iterator library for Lua 5.4+, heavily inspired by
+**iter8** is a lazy iterator library for Lua 5.1+ and LuaJIT, heavily inspired by
 [Rust's iterators](https://doc.rust-lang.org/std/iter/).
 
 Iterators are first-class objects: you can chain, transform, and consume them

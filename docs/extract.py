@@ -232,7 +232,7 @@ def render_function(e: dict, level: int) -> list:
 def render(entries: list) -> str:
     lines = [
         "# iter8 API Reference\n",
-        "**iter8** is a lazy iterator library for Lua 5.4+.\n",
+        "**iter8** is a lazy iterator library for Lua 5.1+ and LuaJIT.\n",
         "",
         "```lua",
         'local Iter8 = require "iter8"',

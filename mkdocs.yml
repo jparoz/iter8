@@ -1,5 +1,5 @@
 site_name: iter8
-site_description: Lazy iterator objects for Lua 5.4+
+site_description: Lazy iterator objects for Lua 5.1+ and LuaJIT
 site_url: https://jparoz.github.io/iter8/
 repo_url: https://github.com/jparoz/iter8
 repo_name: jparoz/iter8
