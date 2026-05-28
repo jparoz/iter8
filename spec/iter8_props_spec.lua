@@ -184,7 +184,7 @@ describe("Property: enumerate", function()
       local r1, r2 = {}, {}
       Iter8.list(t):enumerate():foreach(
         function(i, v) r1[#r1+1] = {i, v} end)
-      Iter8.range(math.maxinteger):zip(Iter8.list(t)):foreach(
+      Iter8.range(math.maxinteger or 2^53):zip(Iter8.list(t)):foreach(
         function(i, v) r2[#r2+1] = {i, v} end)
       assert.are.same(r1, r2)
     end)

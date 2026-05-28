@@ -1,5 +1,8 @@
 -- iter8: Lazy iterator objects
 
+-- Lua 5.1 / LuaJIT compatibility: table.unpack was added in 5.2.
+table.unpack = table.unpack or unpack
+
 ------------------
 -- Constructors --
 ------------------
