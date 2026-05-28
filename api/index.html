@@ -1,0 +1,2840 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Lazy iterator objects for Lua 5.1+ and LuaJIT">
+      
+      
+      
+        <link rel="canonical" href="https://jparoz.github.io/iter8/api/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>API Reference - iter8</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#iter8-api-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="iter8" class="md-header__button md-logo" aria-label="iter8" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            iter8
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jparoz/iter8" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jparoz/iter8
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="iter8" class="md-nav__button md-logo" aria-label="iter8" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    iter8
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jparoz/iter8" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jparoz/iter8
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#constructors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Constructors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iter8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.range
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-unfold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.unfold(seed, fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-gmatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.gmatch(s, pat)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-matches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.matches
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-chars" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.chars(s)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.keys(t)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.values(t)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-pairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.pairs(t)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-ivalues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.ivalues(t)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-ipairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.ipairs(t)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-empty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.empty()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-once" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.once(...)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-rep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.rep(v)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.cycle(iter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-fn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.fn(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-co" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.co(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iterator-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="iterator Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iterator-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:next()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transformers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iterator-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:map(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-trace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:trace(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:filter(pred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-filtermap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:filtermap(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-flatten" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:flatten()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-flatmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:flatmap(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-take" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:take(n)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-drop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:drop(n)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-zip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:zip(...)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-enumerate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:enumerate()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-select" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:select(index)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:chain(...)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-takewhile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:takewhile(pred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-dropwhile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:dropwhile(pred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:scan(acc, fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-chunks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:chunks(n)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:windows(n)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-step-by" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:step_by(n)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-intersperse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:intersperse(sep)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terminators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminators
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Terminators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iterator-force" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:force()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-foreach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:foreach(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-collect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:collect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-fold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:fold(acc, fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-fold1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:fold1(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-concat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:concat(sep)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:any(pred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-all" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:all(pred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-find" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:find(pred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:min()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-max" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:max()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:count()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-sum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:sum()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-nth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:nth(n)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-last" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:last()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#constructors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Constructors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Constructors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iter8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.range
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-unfold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.unfold(seed, fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-gmatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.gmatch(s, pat)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-matches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.matches
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-chars" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.chars(s)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.keys(t)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.values(t)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-pairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.pairs(t)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-ivalues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.ivalues(t)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.list
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-ipairs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.ipairs(t)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-empty" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.empty()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-once" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.once(...)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-rep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.rep(v)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.cycle(iter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-fn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.fn(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iter8-co" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Iter8.co(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iterator-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="iterator Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iterator-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:next()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transformers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iterator-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:map(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-trace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:trace(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:filter(pred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-filtermap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:filtermap(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-flatten" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:flatten()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-flatmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:flatmap(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-take" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:take(n)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-drop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:drop(n)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-zip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:zip(...)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-enumerate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:enumerate()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-select" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:select(index)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:chain(...)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-takewhile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:takewhile(pred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-dropwhile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:dropwhile(pred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:scan(acc, fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-chunks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:chunks(n)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:windows(n)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-step-by" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:step_by(n)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-intersperse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:intersperse(sep)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#terminators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminators
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Terminators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iterator-force" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:force()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-foreach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:foreach(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-collect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:collect()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-fold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:fold(acc, fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-fold1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:fold1(fn)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-concat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:concat(sep)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:any(pred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-all" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:all(pred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-find" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:find(pred)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:min()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-max" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:max()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:count()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-sum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:sum()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-nth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:nth(n)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iterator-last" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iterator:last()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="iter8-api-reference">iter8 API Reference<a class="headerlink" href="#iter8-api-reference" title="Permanent link">&para;</a></h1>
+<p><strong>iter8</strong> is a lazy iterator library for Lua 5.1+ and LuaJIT.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">local</span><span class="w"> </span><span class="nv">Iter8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s2">&quot;iter8&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="constructors">Constructors<a class="headerlink" href="#constructors" title="Permanent link">&para;</a></h2>
+<h3 id="iter8"><code>Iter8</code><a class="headerlink" href="#iter8" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nf">Iter8</span><span class="p">(</span><span class="nv">iter_fn</span><span class="p">:</span><span class="w"> </span><span class="nf">fun</span><span class="p">(</span><span class="nv">state</span><span class="p">:</span><span class="w"> </span><span class="py">any</span><span class="p">,</span><span class="w"> </span><span class="nv">control</span><span class="p">:</span><span class="w"> </span><span class="py">any</span><span class="p">),</span><span class="w"> </span><span class="nv">state</span><span class="p">:</span><span class="w"> </span><span class="py">any</span><span class="p">,</span><span class="w"> </span><span class="nv">initial</span><span class="p">:</span><span class="w"> </span><span class="py">any</span><span class="p">,</span><span class="w"> </span><span class="nv">closing</span><span class="p">:</span><span class="w"> </span><span class="py">any</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="nv">iterator</span>
+</code></pre></div>
+<p>The main <code>Iter8</code> object.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">local</span><span class="w"> </span><span class="nv">Iter8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s2">&quot;iter8&quot;</span>
+</code></pre></div>
+<p>When called as a function,
+wraps the return values of
+a for-loop-compatible, Lua-style iterator
+such as <code>pairs</code>, <code>ipairs</code>, or <code>string.gmatch</code>.
+The resulting <code>iterator</code> behaves transparently;
+that is, it provides the same results when evaluated
+as if you had directly evaluated the arguments to <code>Iter8</code>.</p>
+<p>Example:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">local</span><span class="w"> </span><span class="nv">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">Iter8</span><span class="p">(</span><span class="nb">pairs</span><span class="p">(</span><span class="nv">t</span><span class="p">))</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nv">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">iter</span><span class="p">:</span><span class="nf">take</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kr">for</span><span class="w"> </span><span class="nv">k</span><span class="p">,</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nv">iter</span><span class="w"> </span><span class="kr">do</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nf">process</span><span class="p">(</span><span class="nv">k</span><span class="p">,</span><span class="w"> </span><span class="nv">v</span><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kr">end</span>
+</code></pre></div></p>
+<hr />
+<h3 id="iter8-range"><code>Iter8.range</code><a class="headerlink" href="#iter8-range" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">Iter8</span><span class="p">.</span><span class="nf">range</span><span class="p">(</span><span class="nv">start</span><span class="p">:</span><span class="w"> </span><span class="py">integer</span><span class="p">,</span><span class="w"> </span><span class="nv">finish</span><span class="p">:</span><span class="w"> </span><span class="py">integer</span><span class="p">,</span><span class="w"> </span><span class="nv">step</span><span class="p">:</span><span class="w"> </span><span class="py">integer</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="nv">iterator</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nv">Iter8</span><span class="p">.</span><span class="nf">range</span><span class="p">(</span><span class="nv">start</span><span class="p">:</span><span class="w"> </span><span class="py">integer</span><span class="p">,</span><span class="w"> </span><span class="nv">finish</span><span class="p">:</span><span class="w"> </span><span class="py">integer</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="nv">iterator</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nv">Iter8</span><span class="p">.</span><span class="nf">range</span><span class="p">(</span><span class="nv">finish</span><span class="p">:</span><span class="w"> </span><span class="py">integer</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="nv">iterator</span>
+</code></pre></div>
+<p>Iterate over a range of integers.
+<code>start</code> and <code>step</code> are optional, both defaulting to a value of 1.</p>
+<hr />
+<h3 id="iter8-unfold"><code>Iter8.unfold(seed, fn)</code><a class="headerlink" href="#iter8-unfold" title="Permanent link">&para;</a></h3>
+<p>Generate an <code>iterator</code>
+by (unfolding)[https://en.wikipedia.org/wiki/Anamorphism]
+using the given seed value and function.</p>
+<p><code>fn</code> can return either:
+* both of <code>seed, val</code>;
+* or simply <code>seed</code>, if <code>seed</code> and <code>val</code> would be the same.</p>
+<p>In some sense, this is the opposite of <code>iterator:fold</code>.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>seed</code></td>
+<td><code>T</code></td>
+</tr>
+<tr>
+<td><code>fn</code></td>
+<td><code>(fun(seed: T): T) | (fun(seed: T): T, any)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-fold"><code>iterator.fold</code></a></p>
+<hr />
+<h3 id="iter8-gmatch"><code>Iter8.gmatch(s, pat)</code><a class="headerlink" href="#iter8-gmatch" title="Permanent link">&para;</a></h3>
+<p>Iterate over matches of the Lua pattern-string <code>pat</code> in the string <code>s</code>.</p>
+<p>Has an alias <code>Iter8.matches</code>.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td><code>pat</code></td>
+<td><code>string</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iter8-matches"><code>Iter8.matches</code></a></p>
+<hr />
+<h3 id="iter8-matches"><code>Iter8.matches</code><a class="headerlink" href="#iter8-matches" title="Permanent link">&para;</a></h3>
+<p>Alias for <a href="#iter8-gmatch"><code>Iter8.gmatch</code></a>.</p>
+<hr />
+<h3 id="iter8-chars"><code>Iter8.chars(s)</code><a class="headerlink" href="#iter8-chars" title="Permanent link">&para;</a></h3>
+<p>Iterate over characters in the string <code>s</code>.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s</code></td>
+<td><code>string</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<hr />
+<h3 id="iter8-keys"><code>Iter8.keys(t)</code><a class="headerlink" href="#iter8-keys" title="Permanent link">&para;</a></h3>
+<p>Iterate over the keys in the table <code>t</code>
+in an arbitrary order (similar to <code>pairs</code>).</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>t</code></td>
+<td><code>table</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iter8-values"><code>Iter8.values</code></a>, <a href="#iter8-pairs"><code>Iter8.pairs</code></a></p>
+<hr />
+<h3 id="iter8-values"><code>Iter8.values(t)</code><a class="headerlink" href="#iter8-values" title="Permanent link">&para;</a></h3>
+<p>Iterate over the values in the table <code>t</code>
+in an arbitrary order (similar to <code>pairs</code>).</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>t</code></td>
+<td><code>table</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iter8-keys"><code>Iter8.keys</code></a>, <a href="#iter8-pairs"><code>Iter8.pairs</code></a>, <a href="#iter8-ivalues"><code>Iter8.ivalues</code></a></p>
+<hr />
+<h3 id="iter8-pairs"><code>Iter8.pairs(t)</code><a class="headerlink" href="#iter8-pairs" title="Permanent link">&para;</a></h3>
+<p>Iterate over the keys and values in the table <code>t</code>
+in an arbitrary order (similar to <code>pairs</code>).</p>
+<p>Has an alias <code>Iter8.table</code>.</p>
+<ul>
+<li>If you just want the values, use <code>Iter8.values(t)</code> instead.</li>
+<li>If you just want the keys, use <code>Iter8.keys(t)</code> instead.</li>
+</ul>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>t</code></td>
+<td><code>table</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iter8-keys"><code>Iter8.keys</code></a>, <a href="#iter8-values"><code>Iter8.values</code></a>, <a href="#iter8-ipairs"><code>Iter8.ipairs</code></a>, <a href="#iter8-table"><code>Iter8.table</code></a></p>
+<hr />
+<h3 id="iter8-table"><code>Iter8.table</code><a class="headerlink" href="#iter8-table" title="Permanent link">&para;</a></h3>
+<p>Alias for <a href="#iter8-pairs"><code>Iter8.pairs</code></a>.</p>
+<hr />
+<h3 id="iter8-ivalues"><code>Iter8.ivalues(t)</code><a class="headerlink" href="#iter8-ivalues" title="Permanent link">&para;</a></h3>
+<p>Iterate over the values in the table <code>t</code>
+in increasing order (similar to <code>ipairs</code>).</p>
+<p>Has an alias <code>Iter8.list</code>.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>t</code></td>
+<td><code>table</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iter8-values"><code>Iter8.values</code></a>, <a href="#iter8-pairs"><code>Iter8.pairs</code></a>, <a href="#iter8-list"><code>Iter8.list</code></a></p>
+<hr />
+<h3 id="iter8-list"><code>Iter8.list</code><a class="headerlink" href="#iter8-list" title="Permanent link">&para;</a></h3>
+<p>Alias for <a href="#iter8-ivalues"><code>Iter8.ivalues</code></a>.</p>
+<hr />
+<h3 id="iter8-ipairs"><code>Iter8.ipairs(t)</code><a class="headerlink" href="#iter8-ipairs" title="Permanent link">&para;</a></h3>
+<p>Iterate over the indices and values in the table <code>t</code>
+in increasing order (similar to <code>ipairs</code>).</p>
+<ul>
+<li>If you just want the values, use <code>Iter8.ivalues(t)</code> instead.</li>
+<li>If you just want the indices, use <code>Iter8.range(#t)</code> instead.</li>
+</ul>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>t</code></td>
+<td><code>table</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iter8-ivalues"><code>Iter8.ivalues</code></a>, <a href="#iter8-range"><code>Iter8.range</code></a>, <a href="#iter8-pairs"><code>Iter8.pairs</code></a></p>
+<hr />
+<h3 id="iter8-empty"><code>Iter8.empty()</code><a class="headerlink" href="#iter8-empty" title="Permanent link">&para;</a></h3>
+<p>Returns an empty <code>iterator</code>.</p>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<hr />
+<h3 id="iter8-once"><code>Iter8.once(...)</code><a class="headerlink" href="#iter8-once" title="Permanent link">&para;</a></h3>
+<p>Returns an <code>iterator</code> which will:
+* on the first iteration, produce all the arguments given to <code>Iter8.once</code>;
+* then finish.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>...</code></td>
+<td><code>any</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<hr />
+<h3 id="iter8-rep"><code>Iter8.rep(v)</code><a class="headerlink" href="#iter8-rep" title="Permanent link">&para;</a></h3>
+<p>Repeat the given value forever.</p>
+<p>The returned <code>iterator</code> will never finish.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v</code></td>
+<td><code>any</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<hr />
+<h3 id="iter8-cycle"><code>Iter8.cycle(iter)</code><a class="headerlink" href="#iter8-cycle" title="Permanent link">&para;</a></h3>
+<p>Returns an <code>iterator</code> which
+endlessly repeats through the elements of
+the <code>iterator</code> given as the argument <code>iter</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The repetition is accomplished
+via memoisation of <code>iter</code>'s results;
+as such,
+if your <code>iterator</code> produces non-deterministic or otherwise changing outputs,
+you may wish to find another way to achieve this cycling effect.</p>
+</div>
+<p>The returned <code>iterator</code> will never finish.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>iter</code></td>
+<td><code>iterator</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<hr />
+<h3 id="iter8-fn"><code>Iter8.fn(fn)</code><a class="headerlink" href="#iter8-fn" title="Permanent link">&para;</a></h3>
+<p>Make an <code>iterator</code> from
+a function which uses <code>return</code> to provide the iteration step values.</p>
+<p>Each time the <code>iterator</code> is stepped,
+<code>fn</code> will be called,
+and any values returned
+will be provided as iteration step values.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This constructor is very low-level,
+and is intended only for advanced use-cases,
+when you need to manually implement an <code>iterator</code>.</p>
+<p>Unless you're sure you need this,
+you should probably use other functions from this library.</p>
+</div>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fn</code></td>
+<td><code>fun(): any</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iter8-co"><code>Iter8.co</code></a></p>
+<hr />
+<h3 id="iter8-co"><code>Iter8.co(fn)</code><a class="headerlink" href="#iter8-co" title="Permanent link">&para;</a></h3>
+<p>Make an <code>iterator</code> from a function
+which calls <code>coroutine.yield</code> to provide the iteration step values.
+<code>fn</code> will be passed to <code>coroutine.wrap</code>.</p>
+<p>Each time the <code>iterator</code> is stepped,
+the coroutine will be resumed,
+and any values passed to <code>coroutine.yield</code>
+will be provided as iteration step values.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This constructor is very low-level,
+and is intended only for advanced use-cases,
+when you need to manually implement an <code>iterator</code>.</p>
+<p>Unless you're sure you need this,
+you should probably use other functions from this library.</p>
+</div>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fn</code></td>
+<td><code>fun(): any</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iter8-fn"><code>Iter8.fn</code></a>, <code>coroutine.wrap</code></p>
+<hr />
+<h2 id="iterator-methods">iterator Methods<a class="headerlink" href="#iterator-methods" title="Permanent link">&para;</a></h2>
+<p>This section describes the methods available on <code>iterator</code> objects.</p>
+<h3 id="iterator-next"><code>iterator:next()</code><a class="headerlink" href="#iterator-next" title="Permanent link">&para;</a></h3>
+<p>Return the next value in the <code>iterator</code>,
+or <code>nil</code> if the <code>iterator</code> is finished.</p>
+<p><strong>Returns:</strong> <code>any</code></p>
+<hr />
+<h3 id="transformers">Transformers<a class="headerlink" href="#transformers" title="Permanent link">&para;</a></h3>
+<h4 id="iterator-map"><code>iterator:map(fn)</code><a class="headerlink" href="#iterator-map" title="Permanent link">&para;</a></h4>
+<p>Maps each step of the iterator
+by passing the values to <code>fn</code>,
+and replacing the values with the return values of <code>fn</code>.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fn</code></td>
+<td><code>fun(...): any</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-flatmap"><code>iterator.flatmap</code></a>, <a href="#iterator-filtermap"><code>iterator.filtermap</code></a>, <a href="#iterator-trace"><code>iterator.trace</code></a></p>
+<hr />
+<h4 id="iterator-trace"><code>iterator:trace(fn)</code><a class="headerlink" href="#iterator-trace" title="Permanent link">&para;</a></h4>
+<p>Calls <code>fn</code> on each step of the iterator,
+and returns the iterator unchanged.
+That is,
+<code>fn</code> is called on each step of the iterator
+just for its side-effects.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>iterator:trace(fn)</code> doesn't evaluate the <code>iterator</code>,
+and as such, <code>fn</code> will not be called until the <code>iterator</code> is evaluated.
+If you want to evaluate the iterator straight away,
+use <code>iterator:foreach(fn)</code>.</p>
+</div>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fn</code></td>
+<td><code>fun(...): any</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-map"><code>iterator.map</code></a>, <a href="#iterator-foreach"><code>iterator.foreach</code></a></p>
+<hr />
+<h4 id="iterator-filter"><code>iterator:filter(pred)</code><a class="headerlink" href="#iterator-filter" title="Permanent link">&para;</a></h4>
+<p>Calls <code>pred</code> on each step of the <code>iterator</code>,
+and keeps only the steps for which <code>pred</code> returns true.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pred</code></td>
+<td><code>fun(...): boolean</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-filtermap"><code>iterator.filtermap</code></a></p>
+<hr />
+<h4 id="iterator-filtermap"><code>iterator:filtermap(fn)</code><a class="headerlink" href="#iterator-filtermap" title="Permanent link">&para;</a></h4>
+<p>Maps each step of <code>iterator</code>
+by passing the values to <code>fn</code>,
+and replacing the values with the return values of <code>fn</code>—as long as <code>fn</code>
+has a value other than <code>nil</code> as its first return value.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fn</code></td>
+<td><code>fun(...): any</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-filter"><code>iterator.filter</code></a>, <a href="#iterator-map"><code>iterator.map</code></a></p>
+<hr />
+<h4 id="iterator-flatten"><code>iterator:flatten()</code><a class="headerlink" href="#iterator-flatten" title="Permanent link">&para;</a></h4>
+<p>Turns an <code>iterator</code> of <code>iterator</code>s of values
+into an <code>iterator</code> of values.</p>
+<p><code>flatten</code> removes exactly one level of nesting.</p>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-flatmap"><code>iterator.flatmap</code></a></p>
+<hr />
+<h4 id="iterator-flatmap"><code>iterator:flatmap(fn)</code><a class="headerlink" href="#iterator-flatmap" title="Permanent link">&para;</a></h4>
+<p>Maps each step of <code>iterator</code>
+by passing the values to <code>fn</code>,
+and replacing the values with
+the concatenated results of the <code>iterator</code>s returned from <code>fn</code>.</p>
+<p><code>flatmap</code> removes exactly one level of nesting.</p>
+<p>Useful for when you want to use <code>map</code>,
+but your mapping function may give more than one result.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fn</code></td>
+<td><code>fun(...): iterator</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-flatten"><code>iterator.flatten</code></a>, <a href="#iterator-map"><code>iterator.map</code></a></p>
+<hr />
+<h4 id="iterator-take"><code>iterator:take(n)</code><a class="headerlink" href="#iterator-take" title="Permanent link">&para;</a></h4>
+<p>Yields the first <code>n</code> steps of <code>iterator</code>,
+then ends the iterator.</p>
+<p>If <code>iterator</code> yields fewer than <code>n</code> steps,
+then the result of <code>take</code> will be equivalent to <code>iterator</code>.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n</code></td>
+<td><code>integer</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-drop"><code>iterator.drop</code></a></p>
+<hr />
+<h4 id="iterator-drop"><code>iterator:drop(n)</code><a class="headerlink" href="#iterator-drop" title="Permanent link">&para;</a></h4>
+<p>Skips the first <code>n</code> steps of <code>iterator</code>,
+then yields the rest of the steps of <code>iterator</code>.</p>
+<p>If <code>iterator</code> yields fewer than <code>n</code> steps,
+then the result of <code>drop</code> will be equivalent to <code>iterator.empty()</code>.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n</code></td>
+<td><code>integer</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-take"><code>iterator.take</code></a></p>
+<hr />
+<h4 id="iterator-zip"><code>iterator:zip(...)</code><a class="headerlink" href="#iterator-zip" title="Permanent link">&para;</a></h4>
+<p>Yields the return values of all component <code>iterator</code>s
+as multiple values on each step of the resulting <code>iterator</code>.
+Ends when any one of the component <code>iterator</code>s ends;
+that is,
+the result of <code>zip</code> is the same length as the shortest component <code>iterator</code>.</p>
+<p>All return values of component <code>iterator</code>s are included,
+including multiple return values of component <code>iterator</code>s.</p>
+<p>Joins multiple <code>iterator</code>s "in parallel".
+To join <code>iterator</code>s "in series",
+use <code>iterator:chain(...)</code>.</p>
+<p>Example:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">-- prints: &quot;h&quot; 1; &quot;e&quot; 2; &quot;l&quot; 3; &quot;l&quot; 4; &quot;o&quot; 5</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nv">Iter8</span><span class="p">.</span><span class="nf">chars</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">):</span><span class="nf">zip</span><span class="p">(</span><span class="nv">Iter8</span><span class="p">.</span><span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)):</span><span class="nf">foreach</span><span class="p">(</span><span class="nb">print</span><span class="p">)</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1">-- prints: &quot;a&quot; 1 true; &quot;b&quot; 2 true; &quot;c&quot; 3 true</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nv">Iter8</span><span class="p">.</span><span class="nf">chars</span><span class="p">(</span><span class="s2">&quot;abc&quot;</span><span class="p">):</span><span class="nf">zip</span><span class="p">(</span><span class="nv">Iter8</span><span class="p">.</span><span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="nv">Iter8</span><span class="p">.</span><span class="nf">rep</span><span class="p">(</span><span class="kc">true</span><span class="p">)):</span><span class="nf">foreach</span><span class="p">(</span><span class="nb">print</span><span class="p">)</span>
+</code></pre></div></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>...</code></td>
+<td><code>iterator</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-enumerate"><code>iterator.enumerate</code></a>, <a href="#iterator-select"><code>iterator.select</code></a>, <a href="#iterator-chain"><code>iterator.chain</code></a></p>
+<hr />
+<h4 id="iterator-enumerate"><code>iterator:enumerate()</code><a class="headerlink" href="#iterator-enumerate" title="Permanent link">&para;</a></h4>
+<p>Adds the step index as an extra first value.</p>
+<p>Equivalent to <code>Iter8.range(math.maxinteger):zip(iterator)</code>.</p>
+<p>Example:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">-- prints: 1 &quot;a&quot;; 2 &quot;b&quot;; 3 &quot;c&quot;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kr">for</span><span class="w"> </span><span class="nv">i</span><span class="p">,</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nv">Iter8</span><span class="p">.</span><span class="nf">chars</span><span class="p">(</span><span class="s2">&quot;abc&quot;</span><span class="p">):</span><span class="nf">enumerate</span><span class="p">()</span><span class="w"> </span><span class="kr">do</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nb">print</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="w"> </span><span class="nv">v</span><span class="p">)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="kr">end</span>
+</code></pre></div></p>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-zip"><code>iterator.zip</code></a></p>
+<hr />
+<h4 id="iterator-select"><code>iterator:select(index)</code><a class="headerlink" href="#iterator-select" title="Permanent link">&para;</a></h4>
+<p>Yields a single return value from each of <code>iterator</code>'s steps,
+ignoring the others.
+The argument is chosen by <code>index</code>:
+* If <code>index == 1</code>, the first argument is returned;
+* If <code>index == 2</code>, the second argument is returned;
+* etc.
+In particular,
+if <code>index</code> is greater than the number of arguments,
+the returned iterator will be empty.</p>
+<p><code>iterator:select(index)</code> is analogous to Lua's <code>select(index, ...)</code>.</p>
+<p>This might be thought of as a way to "undo" <code>zip</code>.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>index</code></td>
+<td><code>integer</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>See also:</strong> <a href="#iterator-zip"><code>iterator.zip</code></a></p>
+<hr />
+<h4 id="iterator-chain"><code>iterator:chain(...)</code><a class="headerlink" href="#iterator-chain" title="Permanent link">&para;</a></h4>
+<p>Yields all the values of <code>iterator</code>,
+then all the values of the first argument,
+then all the values of the second argument,
+and so forth;
+until all the <code>iterator</code>s are finished.</p>
+<p>Joins multiple <code>iterator</code>s "in series".
+To join <code>iterator</code>s "in parallel",
+use <code>iterator:zip(...)</code>.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>...</code></td>
+<td><code>iterator</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-zip"><code>iterator.zip</code></a></p>
+<hr />
+<h4 id="iterator-takewhile"><code>iterator:takewhile(pred)</code><a class="headerlink" href="#iterator-takewhile" title="Permanent link">&para;</a></h4>
+<p>Yields elements while <code>pred</code> returns true,
+stopping at the first element for which <code>pred</code> returns false.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pred</code></td>
+<td><code>fun(...): boolean</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-dropwhile"><code>iterator.dropwhile</code></a>, <a href="#iterator-filter"><code>iterator.filter</code></a></p>
+<hr />
+<h4 id="iterator-dropwhile"><code>iterator:dropwhile(pred)</code><a class="headerlink" href="#iterator-dropwhile" title="Permanent link">&para;</a></h4>
+<p>Skips elements while <code>pred</code> returns true,
+then yields all remaining elements.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pred</code></td>
+<td><code>fun(...): boolean</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-takewhile"><code>iterator.takewhile</code></a>, <a href="#iterator-drop"><code>iterator.drop</code></a></p>
+<hr />
+<h4 id="iterator-scan"><code>iterator:scan(acc, fn)</code><a class="headerlink" href="#iterator-scan" title="Permanent link">&para;</a></h4>
+<p>Like <code>fold</code>, but yields each intermediate accumulator value
+rather than returning only the final result.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>acc</code></td>
+<td><code>A</code></td>
+</tr>
+<tr>
+<td><code>fn</code></td>
+<td><code>fun(acc: A, x: T): A</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-fold"><code>iterator.fold</code></a></p>
+<hr />
+<h4 id="iterator-chunks"><code>iterator:chunks(n)</code><a class="headerlink" href="#iterator-chunks" title="Permanent link">&para;</a></h4>
+<p>Yields non-overlapping chunks of <code>n</code> elements as tables.
+The final chunk may be smaller than <code>n</code>
+if the iterator does not divide evenly.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n</code></td>
+<td><code>integer</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-windows"><code>iterator.windows</code></a></p>
+<hr />
+<h4 id="iterator-windows"><code>iterator:windows(n)</code><a class="headerlink" href="#iterator-windows" title="Permanent link">&para;</a></h4>
+<p>Yields every overlapping window of <code>n</code> consecutive elements as a table.
+Produces <code>max(0, length - n + 1)</code> windows.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n</code></td>
+<td><code>integer</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<p><strong>See also:</strong> <a href="#iterator-chunks"><code>iterator.chunks</code></a></p>
+<hr />
+<h4 id="iterator-step-by"><code>iterator:step_by(n)</code><a class="headerlink" href="#iterator-step-by" title="Permanent link">&para;</a></h4>
+<p>Yields every <code>n</code>th element, starting with the first.</p>
+<p><code>step_by(1)</code> is equivalent to the original iterator.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n</code></td>
+<td><code>integer</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<hr />
+<h4 id="iterator-intersperse"><code>iterator:intersperse(sep)</code><a class="headerlink" href="#iterator-intersperse" title="Permanent link">&para;</a></h4>
+<p>Inserts <code>sep</code> between each element of <code>iterator</code>.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sep</code></td>
+<td><code>any</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>iterator</code></p>
+<hr />
+<h3 id="terminators">Terminators<a class="headerlink" href="#terminators" title="Permanent link">&para;</a></h3>
+<h4 id="iterator-force"><code>iterator:force()</code><a class="headerlink" href="#iterator-force" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code> for its side effects,
+throwing away its return values.</p>
+<p><strong>See also:</strong> <a href="#iterator-collect"><code>iterator.collect</code></a>, <a href="#iterator-foreach"><code>iterator.foreach</code></a></p>
+<hr />
+<h4 id="iterator-foreach"><code>iterator:foreach(fn)</code><a class="headerlink" href="#iterator-foreach" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+calling <code>fn</code> on each step's values,
+and throwing away <code>fn</code>'s return values.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fn</code></td>
+<td><code>fun(...)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>See also:</strong> <a href="#iterator-trace"><code>iterator.trace</code></a>, <a href="#iterator-map"><code>iterator.map</code></a>, <a href="#iterator-force"><code>iterator.force</code></a></p>
+<hr />
+<h4 id="iterator-collect"><code>iterator:collect()</code><a class="headerlink" href="#iterator-collect" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+collecting all result values into a table.</p>
+<ul>
+<li>If <code>iterator</code> has one return value per step,
+  the resulting table will be list-like
+  (i.e. keys from 1, 2, 3...).</li>
+<li>If <code>iterator</code> has two or more return values per step,
+  the resulting table will be map-like
+  (i.e. keys from the first return value,
+   values from the second return value).
+  Note that all other arguments will be ignored.</li>
+</ul>
+<p>If you just want to evaluate <code>iterator</code>,
+and don't care about the results,
+use <code>iterator:force()</code> instead.</p>
+<p><strong>Returns:</strong> <code>table</code></p>
+<p><strong>See also:</strong> <a href="#iterator-force"><code>iterator.force</code></a></p>
+<hr />
+<h4 id="iterator-fold"><code>iterator:fold(acc, fn)</code><a class="headerlink" href="#iterator-fold" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+folding the return values into the accumulator <code>acc</code>
+using the folding function <code>fn</code>.</p>
+<p>On each step,
+<code>fn</code> is called like so:
+<code>acc = fn(x, acc)</code>
+(where <code>x</code> is the current value of <code>iterator</code>,
+ and <code>acc</code> is the previously-returned value of <code>acc</code>).</p>
+<p>The result returned from <code>fold</code> is the final value of <code>acc</code>.</p>
+<p>In some sense, this is the opposite of <code>Iter8.unfold</code>.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>acc</code></td>
+<td><code>A</code></td>
+</tr>
+<tr>
+<td><code>fn</code></td>
+<td><code>fun(x:</code>T<code>, acc: A): A</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>A</code></p>
+<p><strong>See also:</strong> <a href="#iterator-fold1"><code>iterator.fold1</code></a>, <a href="#iter8-unfold"><code>Iter8.unfold</code></a></p>
+<hr />
+<h4 id="iterator-fold1"><code>iterator:fold1(fn)</code><a class="headerlink" href="#iterator-fold1" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+folding the return values into the accumulator
+using the folding function <code>fn</code>.</p>
+<p>The accumulator is initialised with
+the first return value of
+the first step of <code>iterator</code>,
+and then the rest of the steps are folded in.
+This is useful for when you know that <code>iterator</code> contains at least one value,
+and you don't want to—or are unable to—provide a starting accumulator value.</p>
+<p>If <code>iterator</code> is empty,
+<code>fold1</code> returns <code>nil</code>.</p>
+<p>See the documentation of <code>fold</code> for more information on how folding works.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fn</code></td>
+<td><code>fun(x:</code>T<code>, acc:</code>A<code>): A</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>A</code></p>
+<p><strong>See also:</strong> <a href="#iterator-fold"><code>iterator.fold</code></a></p>
+<hr />
+<h4 id="iterator-concat"><code>iterator:concat(sep)</code><a class="headerlink" href="#iterator-concat" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+returning the result of string-concatenating each value of <code>iterator</code>.</p>
+<p>An optional <code>sep</code> string is inserted between each element.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sep?</code></td>
+<td><code>string</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>string</code></p>
+<hr />
+<h4 id="iterator-any"><code>iterator:any(pred)</code><a class="headerlink" href="#iterator-any" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+returning <code>true</code> if <code>pred</code> returns true for at least one element.
+Short-circuits on the first matching element.</p>
+<p>Returns <code>false</code> for an empty iterator.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pred</code></td>
+<td><code>fun(...): boolean</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code></p>
+<p><strong>See also:</strong> <a href="#iterator-all"><code>iterator.all</code></a></p>
+<hr />
+<h4 id="iterator-all"><code>iterator:all(pred)</code><a class="headerlink" href="#iterator-all" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+returning <code>true</code> if <code>pred</code> returns true for every element.
+Short-circuits on the first non-matching element.</p>
+<p>Returns <code>true</code> for an empty iterator.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pred</code></td>
+<td><code>fun(...): boolean</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code></p>
+<p><strong>See also:</strong> <a href="#iterator-any"><code>iterator.any</code></a></p>
+<hr />
+<h4 id="iterator-find"><code>iterator:find(pred)</code><a class="headerlink" href="#iterator-find" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+returning the first element for which <code>pred</code> returns true,
+or <code>nil</code> if no element matches.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pred</code></td>
+<td><code>fun(...): boolean</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>any</code></p>
+<hr />
+<h4 id="iterator-min"><code>iterator:min()</code><a class="headerlink" href="#iterator-min" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+returning the minimum value.
+Returns <code>nil</code> for an empty iterator.</p>
+<p><strong>Returns:</strong> <code>any</code></p>
+<p><strong>See also:</strong> <a href="#iterator-max"><code>iterator.max</code></a></p>
+<hr />
+<h4 id="iterator-max"><code>iterator:max()</code><a class="headerlink" href="#iterator-max" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+returning the maximum value.
+Returns <code>nil</code> for an empty iterator.</p>
+<p><strong>Returns:</strong> <code>any</code></p>
+<p><strong>See also:</strong> <a href="#iterator-min"><code>iterator.min</code></a></p>
+<hr />
+<h4 id="iterator-count"><code>iterator:count()</code><a class="headerlink" href="#iterator-count" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+returning the number of steps of <code>iterator</code>.</p>
+<p><strong>Returns:</strong> <code>integer</code></p>
+<hr />
+<h4 id="iterator-sum"><code>iterator:sum()</code><a class="headerlink" href="#iterator-sum" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+returning the numeric sum of each value of <code>iterator</code>.</p>
+<p><strong>Returns:</strong> <code>number</code></p>
+<hr />
+<h4 id="iterator-nth"><code>iterator:nth(n)</code><a class="headerlink" href="#iterator-nth" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+returning the yielded values of the "nth" step of <code>iterator</code>.</p>
+<p>Like many things in Lua,
+<code>nth</code> is 1-based;
+i.e. <code>iterator:nth(1)</code> will return the first step of <code>iterator</code>.</p>
+<p>If <code>n</code> is greater than the number of steps of <code>iterator</code>,
+<code>nth</code> returns <code>nil</code>.</p>
+<p><strong>Returns:</strong> <code>any</code></p>
+<hr />
+<h4 id="iterator-last"><code>iterator:last()</code><a class="headerlink" href="#iterator-last" title="Permanent link">&para;</a></h4>
+<p>Evaluates <code>iterator</code>,
+returning the yielded values of the final step of <code>iterator</code>.</p>
+<p>If <code>iterator</code> is empty,
+<code>last</code> returns <code>nil</code>.</p>
+<p><strong>Returns:</strong> <code>any</code></p>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.top", "content.code.copy", "search.highlight", "search.suggest", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
